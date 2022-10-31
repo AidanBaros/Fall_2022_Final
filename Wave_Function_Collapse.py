@@ -70,7 +70,11 @@ def determine_possibilities():
             if tile.collapsed == False:
                 filter = copy.copy(tile.possibilities)
                 isDone = False
-                if j + 1 < len(grid[i]):
+                if j == len(grid[i]) - 1:
+                    for possibility in tile.possibilities:
+                        if possibility.sides[1] == 1:
+                            filter.remove(possibility)
+                elif j + 1 < len(grid[i]):
                     if grid[i][j + 1].collapsed:
                         for possibility in tile.possibilities:
                             if grid[i][j + 1].tile.sides[3] != possibility.sides[1]:
@@ -130,7 +134,7 @@ def Weights(possibilities):
 
 
 def PreGen():
-    
+
     pass
 
 
