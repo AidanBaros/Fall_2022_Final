@@ -4,10 +4,6 @@ import copy
 import numpy as np
 
 pygame.init()
-pygame.display.set_caption("Wave Function Collapse")
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-screenX, screenY = screen.get_size()
-Running = True
 
 
 class Tile:
@@ -40,20 +36,21 @@ TileImages = [
 
 
 class Space:
-    def __init__(self, xpos, ypos, Yscale):
+    def __init__(self, xpos, ypos, Yscale, screen):
         self.collapsed = False
         self.possibilities = copy.copy(TileImages)
         self.pos = (xpos, ypos)
         self.entropy = len(TileImages)
         self.tile: Tile
         self.Yscale = Yscale
+        self.screen = screen
 
     def draw(self):
         if self.collapsed:
             self.tile.image = pygame.transform.scale(
                 self.tile.image, (self.Yscale, self.Yscale)
             )
-            screen.blit(self.tile.image, self.pos)
+            self.screen.blit(self.tile.image, self.pos)
 
     def collapse(self):
         if len(self.possibilities) != 0:
@@ -140,61 +137,38 @@ def Weights(possibilities):
                 Weights.append(Counter)
         GeneratorNum += i.Weight
         Counter += 1
-    print()
-    print(GeneratorNum)
     ran = random.randint(0, GeneratorNum)
-    print(Weights)
-    print(ran)
     if ran <= 0 and len(Weights) != 0:
         return Weights[ran]
     elif len(Weights) != 0:
         return Weights[ran - 1]
     else:
         return 0
-    
 
-def makeGrid():
+
+def makeGrid(screenX, screenY, screen, XTC, YTC):
     global done
     global grid
     done = False
     grid = []
+    XTC = 15
+    YTC = 10
+    sizeY = screenY // YTC
+    offset = (screenX - (sizeY * XTC)) // 2
+    sizeX = sizeY
+    
     for i in range(int(screenY / sizeY)):
         grid.append([])
-        for j in range(XTileCount):
-            grid[i].append(Space((j * sizeX) + offset, i * sizeY, sizeY))
+        for j in range(XTC):
+            grid[i].append(Space((j * sizeX) + offset, i * sizeY, sizeY, screen))
 
 
-XTileCount = 15
-YTileCount = 10
-
-sizeY = screenY // YTileCount
-offset = (screenX - (sizeY * XTileCount)) // 2
-sizeX = sizeY
-makeGrid()
-
-
-
-
-
-while Running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            Running = False
-
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LSHIFT]:
-        makeGrid()
-    if keys[pygame.K_LCTRL]:
-        Running = False
-
-    screen.fill((0, 0, 0))
-
+def start(screenY,XTC, YTC):
+    global done
     while not done:
         done = determine_possibilities()
         collapse()
 
-    for i in range(int(screenY / sizeY)):
-        for j in range(XTileCount):
+    for i in range(int(screenY / (screenY // YTC))):
+        for j in range(XTC):
             grid[i][j].draw()
-
-    pygame.display.flip()
