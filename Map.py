@@ -156,19 +156,22 @@ def makeGrid(screenX, screenY, screen, XTC, YTC):
     sizeY = screenY // YTC
     offset = (screenX - (sizeY * XTC)) // 2
     sizeX = sizeY
-    
+
     for i in range(int(screenY / sizeY)):
         grid.append([])
         for j in range(XTC):
             grid[i].append(Space((j * sizeX) + offset, i * sizeY, sizeY, screen))
 
-
-def start(screenY,XTC, YTC):
-    global done
     while not done:
         done = determine_possibilities()
         collapse()
+    return grid
 
+
+def start(screenY, XTC, YTC):
     for i in range(int(screenY / (screenY // YTC))):
         for j in range(XTC):
             grid[i][j].draw()
+            print(grid[i][j].tile.ID, end=", ")
+        print()
+    print()

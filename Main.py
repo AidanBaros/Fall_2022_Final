@@ -1,6 +1,10 @@
-from Wave_Function_Collapse import *
+from Map import *
+from Home import *
+from Rooms import *
+from Player import *
+from Monster import *
+
 import pygame
-import math
 
 pygame.init()
 pygame.display.set_caption("Wave Function Collapse")
@@ -11,7 +15,10 @@ Running = True
 YTC = 10
 XTC = int(YTC * 1.5)
 
-makeGrid(screenX, screenY, screen, XTC, YTC)
+r1 = room(0, screenX, screenY, screen)
+
+grid = makeGrid(screenX, screenY, screen, XTC, YTC)
+
 
 while Running:
     for event in pygame.event.get():
@@ -28,4 +35,5 @@ while Running:
     if keys[pygame.K_LCTRL]:
         Running = False
 
+    r1.draw()
     pygame.display.flip()
