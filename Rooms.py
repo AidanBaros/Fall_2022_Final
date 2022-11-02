@@ -5,7 +5,8 @@ pygame.init()
 
 
 class room:
-    def __init__(self, roomtype, screenX, screenY, screen):
+    def __init__(self, roomtype, hallwayDirection, screenX, screenY, screen):
+        self.hallwayDirection = hallwayDirection
         self.roomtype = roomtype
         self.screenX = screenX
         self.screenY = screenY
@@ -22,3 +23,15 @@ class room:
         pygame.draw.rect(self.screen, (0, 0, 0), (xPoint, 0, Width, Height))
         pygame.draw.rect(self.screen, (0, 0, 0), (0, yPoint, Width, Height))
         pygame.draw.rect(self.screen, (0, 0, 0), (xPoint, yPoint, Width, Height))
+        if self.hallwayDirection[0] == 0:
+            pygame.draw.rect(self.screen, (0, 0, 0), (Width, 0, hallwaySize, Height))
+        if self.hallwayDirection[1] == 0:
+            pygame.draw.rect(self.screen, (0, 0, 0), (xPoint, Height, Width, hallwaySize))
+        if self.hallwayDirection[2] == 0:
+            pygame.draw.rect(self.screen, (0, 0, 0), (Width, yPoint, hallwaySize, Height))
+        if self.hallwayDirection[3] == 0:
+            pygame.draw.rect(self.screen, (0, 0, 0), (0, Height, Width, hallwaySize))
+
+
+
+        #print(self.hallwayDirection)
