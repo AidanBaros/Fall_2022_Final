@@ -14,12 +14,27 @@ Running = True
 
 YTC = 10
 XTC = int(YTC * 1.5)
-XPos = 0
-YPos = 0
 
 roomList = []
 
 grid = makeGrid(screenX, screenY, screen, XTC, YTC)
+
+ranX = random.randint(0,XTC)
+ranY = random.randint(0,YTC)
+
+while True:
+    if grid[ranY][ranX].tile.sides == [0,0,0,0]:
+        ranX = random.randint(0,XTC)
+        ranY = random.randint(0,YTC)
+    else:
+        MapXPos = ranX
+        MapYPos = ranY
+        break
+    
+XPos = screenX // 2
+YPos = screenY // 2
+PlayerSizeX = 50
+PlayerSizeY = 100
 
 for i in range(YTC):
     roomList.append([])
@@ -32,7 +47,9 @@ while Running:
             Running = False
     screen.fill((0, 0, 0))
 
-    roomList[YPos][XPos].draw()
+    roomList[MapYPos][MapXPos].draw()
+
+    pygame.draw.rect(screen, (255,0,0), (XPos, YPos, PlayerSizeX, PlayerSizeY))
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LSHIFT]:
@@ -44,15 +61,26 @@ while Running:
     if keys[pygame.K_LCTRL]:
         Running = False
 
-    if keys[pygame.K_LEFT] and XPos > 0:
-        XPos -= 1
-    if keys[pygame.K_RIGHT] and XPos < XTC - 1:
-        XPos += 1
-    if keys[pygame.K_UP] and YPos > 0:
-        YPos -= 1
-    if keys[pygame.K_DOWN] and YPos < YTC - 1:
-        YPos += 1
+    if XPos == 0 and grid[MapYPos][MapXPos].tile.sides[3] == 1:
+        MapXPos -= 1
+        XPos = screenX - PlayerSizeX - 10
+    if XPos == screenX - PlayerSizeX and grid[MapYPos][MapXPos].tile.sides[1] == 1:
+        MapXPos += 1
+        XPos = 10
+    if YPos == 0 and grid[MapYPos][MapXPos].tile.sides[0] == 1:
+        MapYPos -= 1
+        YPos = screenY - PlayerSizeY - 10
+    if YPos == screenY - PlayerSizeY and grid[MapYPos][MapXPos].tile.sides[2] == 1:
+        MapYPos += 1
+        YPos = 10
 
-    
+    if keys[pygame.K_a] and XPos > 0:
+        XPos -= 5
+    if keys[pygame.K_d] and XPos < screenX - PlayerSizeX:
+        XPos += 5
+    if keys[pygame.K_w] and YPos > 0:
+        YPos -= 5
+    if keys[pygame.K_s] and YPos < screenY - PlayerSizeY:
+        YPos += 5
 
     pygame.display.flip()

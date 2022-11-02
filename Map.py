@@ -172,6 +172,3 @@ def start(screenY, XTC, YTC):
     for i in range(int(screenY / (screenY // YTC))):
         for j in range(XTC):
             grid[i][j].draw()
-            #print(grid[i][j].tile.ID, end=", ")
-        #print()
-    #print()
