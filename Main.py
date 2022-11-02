@@ -19,27 +19,31 @@ roomList = []
 
 grid = makeGrid(screenX, screenY, screen, XTC, YTC)
 
-ranX = random.randint(0,XTC)
-ranY = random.randint(0,YTC)
+ranX = random.randint(0, XTC - 1)
+ranY = random.randint(0, YTC - 1)
 
 while True:
-    if grid[ranY][ranX].tile.sides == [0,0,0,0]:
-        ranX = random.randint(0,XTC)
-        ranY = random.randint(0,YTC)
+    if grid[ranY][ranX].tile.sides == [0, 0, 0, 0]:
+        ranX = random.randint(0, XTC)
+        ranY = random.randint(0, YTC)
     else:
         MapXPos = ranX
         MapYPos = ranY
         break
-    
+
 XPos = screenX // 2
 YPos = screenY // 2
 PlayerSizeX = 50
 PlayerSizeY = 100
 
+PlayerSpeed = int(screenX // 750)
+
 for i in range(YTC):
     roomList.append([])
     for j in range(XTC):
-        roomList[i].append(room(0,grid[i][j].tile.sides, screenX, screenY, screen))
+        roomList[i].append(
+            room(0, grid[i][j].tile.sides, grid[i][j].tile.ID, screenX, screenY, screen)
+        )
 
 while Running:
     for event in pygame.event.get():
@@ -49,7 +53,7 @@ while Running:
 
     roomList[MapYPos][MapXPos].draw()
 
-    pygame.draw.rect(screen, (255,0,0), (XPos, YPos, PlayerSizeX, PlayerSizeY))
+    pygame.draw.rect(screen, (255, 0, 0), (XPos, YPos, PlayerSizeX, PlayerSizeY))
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LSHIFT]:
@@ -75,12 +79,12 @@ while Running:
         YPos = 10
 
     if keys[pygame.K_a] and XPos > 0:
-        XPos -= 5
+        XPos -= PlayerSpeed
     if keys[pygame.K_d] and XPos < screenX - PlayerSizeX:
-        XPos += 5
+        XPos += PlayerSpeed
     if keys[pygame.K_w] and YPos > 0:
-        YPos -= 5
+        YPos -= PlayerSpeed
     if keys[pygame.K_s] and YPos < screenY - PlayerSizeY:
-        YPos += 5
+        YPos += PlayerSpeed
 
     pygame.display.flip()
