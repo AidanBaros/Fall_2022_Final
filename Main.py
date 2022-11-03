@@ -42,7 +42,15 @@ for i in range(YTC):
     roomList.append([])
     for j in range(XTC):
         roomList[i].append(
-            room(0, grid[i][j].tile.sides, grid[i][j].tile.ID, screenX, screenY, screen)
+            room(
+                0,
+                grid[i][j].tile.sides,
+                grid[i][j].tile.ID,
+                screenX,
+                screenY,
+                screen,
+                (PlayerSizeX, PlayerSizeY),
+            )
         )
 
 while Running:
@@ -78,13 +86,29 @@ while Running:
         MapYPos += 1
         YPos = 10
 
-    if keys[pygame.K_a] and XPos > 0:
+    if (
+        keys[pygame.K_a]
+        and XPos > 0
+        and roomList[MapYPos][MapXPos].collision((XPos, YPos)) == False
+    ):
         XPos -= PlayerSpeed
-    if keys[pygame.K_d] and XPos < screenX - PlayerSizeX:
+    if (
+        keys[pygame.K_d]
+        and XPos < screenX - PlayerSizeX
+        and roomList[MapYPos][MapXPos].collision((XPos, YPos)) == False
+    ):
         XPos += PlayerSpeed
-    if keys[pygame.K_w] and YPos > 0:
+    if (
+        keys[pygame.K_w]
+        and YPos > 0
+        and roomList[MapYPos][MapXPos].collision((XPos, YPos)) == False
+    ):
         YPos -= PlayerSpeed
-    if keys[pygame.K_s] and YPos < screenY - PlayerSizeY:
+    if (
+        keys[pygame.K_s]
+        and YPos < screenY - PlayerSizeY
+        and roomList[MapYPos][MapXPos].collision((XPos, YPos)) == False
+    ):
         YPos += PlayerSpeed
 
     pygame.display.flip()
