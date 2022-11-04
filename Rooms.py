@@ -31,36 +31,72 @@ class room:
         self.offset = 0
         self.color = (255, 255, 255)
 
+        self.center_square = pygame.Rect(
+            self.WidthNoHallway,
+            self.HeightNoHallway,
+            self.hallwaySize,
+            self.hallwaySize,
+        )
+
+        self.main_room = pygame.Rect(
+            self.offset,
+            self.offset,
+            self.screenX - (self.offset * 2),
+            self.screenY - (self.offset * 2),
+        )
+
+        self.top_hallway = pygame.Rect(
+            self.WidthNoHallway, 0, self.hallwaySize, self.HeightNoHallway
+        )
+
+        self.right_hallway = pygame.Rect(
+            self.WidthHallway,
+            self.HeightNoHallway,
+            self.WidthNoHallway,
+            self.hallwaySize,
+        )
+
+        self.bottom_hallway = pygame.Rect(
+            self.WidthNoHallway,
+            self.HeightHallway,
+            self.hallwaySize,
+            self.HeightNoHallway,
+        )
+
+        self.left_hallway = pygame.Rect(
+            0, self.HeightNoHallway, self.WidthNoHallway, self.hallwaySize
+        )
+
     def draw(self):
         self.screen.fill((0, 0, 0))
         pygame.draw.rect(
             self.screen,
             (255, 255, 255),
-            (self.WidthNoHallway, self.HeightNoHallway, self.hallwaySize, self.hallwaySize),
+            self.center_square,
         )
         if self.hallwayDirection[0] == 1:
             pygame.draw.rect(
                 self.screen,
                 (255, 255, 255),
-                (self.WidthNoHallway, 0, self.hallwaySize, self.HeightNoHallway),
+                self.top_hallway,
             )
         if self.hallwayDirection[1] == 1:
             pygame.draw.rect(
                 self.screen,
                 (255, 255, 255),
-                (self.WidthHallway, self.HeightNoHallway, self.WidthNoHallway, self.hallwaySize),
+                self.right_hallway,
             )
         if self.hallwayDirection[2] == 1:
             pygame.draw.rect(
                 self.screen,
                 (255, 255, 255),
-                (self.WidthNoHallway, self.HeightHallway, self.hallwaySize, self.HeightNoHallway),
+                self.bottom_hallway,
             )
         if self.hallwayDirection[3] == 1:
             pygame.draw.rect(
                 self.screen,
                 (255, 255, 255),
-                (0, self.HeightNoHallway, self.WidthNoHallway, self.hallwaySize),
+                self.left_hallway,
             )
 
         if self.ID == 0:
@@ -76,17 +112,52 @@ class room:
             pygame.draw.rect(
                 self.screen,
                 self.color,
-                (
-                    self.offset,
-                    self.offset,
-                    self.screenX - (self.offset * 2),
-                    self.screenY - (self.offset * 2),
-                ),
+                self.main_room,
             )
 
-    def collision(self, playerPos):
-        Colliding = False
+    def collision(self, player):
         if self.ID in (1, 2, 3, 4, 11, 12, 13, 14, 15):
+            return (
+                (player.colliderect(self.main_room))
+                or (player.colliderect(self.center_square))
+                or (
+                    self.hallwayDirection[0] == 1
+                    and player.colliderect(self.top_hallway)
+                )
+                or (
+                    self.hallwayDirection[1] == 1
+                    and player.colliderect(self.right_hallway)
+                )
+                or (
+                    self.hallwayDirection[2] == 1
+                    and player.colliderect(self.bottom_hallway)
+                )
+                or (
+                    self.hallwayDirection[3] == 1
+                    and player.colliderect(self.left_hallway)
+                )
+            )
+        return (
+            (
+                self.hallwayDirection[0] == 1
+                and player.colliderect(self.top_hallway) == True
+            )
+            or (
+                self.hallwayDirection[1] == 1
+                and player.colliderect(self.right_hallway) == True
+            )
+            or (
+                self.hallwayDirection[2] == 1
+                and player.colliderect(self.bottom_hallway) == True
+            )
+            or (
+                self.hallwayDirection[3] == 1
+                and player.colliderect(self.left_hallway) == True
+            )
+        )
+
+    """
+    if self.ID in (1, 2, 3, 4, 11, 12, 13, 14, 15):
             if self.hallwayDirection[0] == 1:
                 if (
                     (
@@ -122,12 +193,8 @@ class room:
                 pass
         else:
             pass
-        
-        return Colliding
-
-
-
-    """def collision(self, playerPos, direction):
+    
+    def collision(self, playerPos, direction):
 
         Colliding = False
         print(self.offset)

@@ -15,7 +15,7 @@ Running = True
 YTC = 10
 XTC = int(YTC * 1.5)
 
-roomList = []
+roomList: list[room] = []
 
 grid = makeGrid(screenX, screenY, screen, XTC, YTC)
 
@@ -31,13 +31,9 @@ while True:
         MapYPos = ranY
         break
 
-XPos = screenX // 2
-YPos = screenY // 2
-PlayerSizeX = 50
-PlayerSizeY = 100
+player = pygame.Rect(screenX // 2, screenY // 2, 50, 100)
 
 PlayerSpeed = int(screenX // 750)
-PlayerSpeed = 7
 print(screenX)
 print(PlayerSpeed)
 
@@ -52,7 +48,7 @@ for i in range(YTC):
                 screenX,
                 screenY,
                 screen,
-                (PlayerSizeX, PlayerSizeY),
+                (player.width, player.height),
             )
         )
 
@@ -64,7 +60,7 @@ while Running:
 
     roomList[MapYPos][MapXPos].draw()
 
-    pygame.draw.rect(screen, (255, 0, 0), (XPos, YPos, PlayerSizeX, PlayerSizeY))
+    pygame.draw.rect(screen, (255, 0, 0), player)
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LSHIFT]:
@@ -76,42 +72,44 @@ while Running:
     if keys[pygame.K_LCTRL]:
         Running = False
 
-    if XPos == 0 and grid[MapYPos][MapXPos].tile.sides[3] == 1:
+    if player.x == 0 and grid[MapYPos][MapXPos].tile.sides[3] == 1:
         MapXPos -= 1
-        XPos = screenX - PlayerSizeX - 10
-    if XPos == screenX - PlayerSizeX and grid[MapYPos][MapXPos].tile.sides[1] == 1:
+        player.x = screenX - player.w - 10
+    if player.x == screenX - player.w and grid[MapYPos][MapXPos].tile.sides[1] == 1:
         MapXPos += 1
-        XPos = 10
-    if YPos == 0 and grid[MapYPos][MapXPos].tile.sides[0] == 1:
+        player.x = 10
+    if player.y == 0 and grid[MapYPos][MapXPos].tile.sides[0] == 1:
         MapYPos -= 1
-        YPos = screenY - PlayerSizeY - 10
-    if YPos == screenY - PlayerSizeY and grid[MapYPos][MapXPos].tile.sides[2] == 1:
+        player.y = screenY - player.h - 10
+    if player.y == screenY - player.h and grid[MapYPos][MapXPos].tile.sides[2] == 1:
         MapYPos += 1
-        YPos = 10
+        player.y = 10
+
+    # player.colliderect(roomList[MapYPos][MapXPos].center_square)
 
     if (
         keys[pygame.K_a]
-        and roomList[MapYPos][MapXPos].collision((XPos, YPos)) == False
+        and player.left >= 0
+        and roomList[MapYPos][MapXPos].collision(player)
     ):
-        XPos -= PlayerSpeed
-        print(XPos, YPos)
+        player.x -= PlayerSpeed
     if (
         keys[pygame.K_d]
-        and roomList[MapYPos][MapXPos].collision((XPos, YPos)) == False
+        and player.right <= screenX
+        and roomList[MapYPos][MapXPos].collision(player)
     ):
-        XPos += PlayerSpeed
-        print(XPos, YPos)
+        player.x += PlayerSpeed
     if (
         keys[pygame.K_w]
-        and roomList[MapYPos][MapXPos].collision((XPos, YPos)) == False
+        and player.top >= 0
+        and roomList[MapYPos][MapXPos].collision(player)
     ):
-        YPos -= PlayerSpeed
-        print(XPos, YPos)
+        player.y -= PlayerSpeed
     if (
         keys[pygame.K_s]
-        and roomList[MapYPos][MapXPos].collision((XPos, YPos)) == False
+        and player.bottom <= screenY
+        and roomList[MapYPos][MapXPos].collision(player)
     ):
-        YPos += PlayerSpeed
-        print(XPos, YPos)
+        player.y += PlayerSpeed
 
     pygame.display.flip()

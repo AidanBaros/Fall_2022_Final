@@ -146,7 +146,7 @@ def Weights(possibilities):
         return 0
 
 
-def makeGrid(screenX, screenY, screen, XTC, YTC):
+def makeGrid(screenX, screenY, screen, XTC, YTC) -> list[Space]:
     global done
     global grid
     done = False
