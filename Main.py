@@ -37,6 +37,9 @@ PlayerSizeX = 50
 PlayerSizeY = 100
 
 PlayerSpeed = int(screenX // 750)
+PlayerSpeed = 7
+print(screenX)
+print(PlayerSpeed)
 
 for i in range(YTC):
     roomList.append([])
@@ -88,27 +91,27 @@ while Running:
 
     if (
         keys[pygame.K_a]
-        and XPos > 0
         and roomList[MapYPos][MapXPos].collision((XPos, YPos)) == False
     ):
         XPos -= PlayerSpeed
+        print(XPos, YPos)
     if (
         keys[pygame.K_d]
-        and XPos < screenX - PlayerSizeX
         and roomList[MapYPos][MapXPos].collision((XPos, YPos)) == False
     ):
         XPos += PlayerSpeed
+        print(XPos, YPos)
     if (
         keys[pygame.K_w]
-        and YPos > 0
         and roomList[MapYPos][MapXPos].collision((XPos, YPos)) == False
     ):
         YPos -= PlayerSpeed
+        print(XPos, YPos)
     if (
         keys[pygame.K_s]
-        and YPos < screenY - PlayerSizeY
         and roomList[MapYPos][MapXPos].collision((XPos, YPos)) == False
     ):
         YPos += PlayerSpeed
+        print(XPos, YPos)
 
     pygame.display.flip()

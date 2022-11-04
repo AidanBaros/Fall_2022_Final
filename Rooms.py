@@ -24,10 +24,10 @@ class room:
         self.playerSize = playerSize
 
         self.hallwaySize = self.screenX // 8
-        self.Width = self.screenX // 2 - self.hallwaySize // 2
-        self.Height = self.screenY // 2 - self.hallwaySize // 2
-        self.xPoint = self.screenX // 2 + self.hallwaySize // 2
-        self.yPoint = self.screenY // 2 + self.hallwaySize // 2
+        self.WidthNoHallway = self.screenX // 2 - self.hallwaySize // 2
+        self.HeightNoHallway = self.screenY // 2 - self.hallwaySize // 2
+        self.WidthHallway = self.screenX // 2 + self.hallwaySize // 2
+        self.HeightHallway = self.screenY // 2 + self.hallwaySize // 2
         self.offset = 0
         self.color = (255, 255, 255)
 
@@ -36,31 +36,31 @@ class room:
         pygame.draw.rect(
             self.screen,
             (255, 255, 255),
-            (self.Width, self.Height, self.hallwaySize, self.hallwaySize),
+            (self.WidthNoHallway, self.HeightNoHallway, self.hallwaySize, self.hallwaySize),
         )
         if self.hallwayDirection[0] == 1:
             pygame.draw.rect(
                 self.screen,
                 (255, 255, 255),
-                (self.Width, 0, self.hallwaySize, self.Height),
+                (self.WidthNoHallway, 0, self.hallwaySize, self.HeightNoHallway),
             )
         if self.hallwayDirection[1] == 1:
             pygame.draw.rect(
                 self.screen,
                 (255, 255, 255),
-                (self.xPoint, self.Height, self.Width, self.hallwaySize),
+                (self.WidthHallway, self.HeightNoHallway, self.WidthNoHallway, self.hallwaySize),
             )
         if self.hallwayDirection[2] == 1:
             pygame.draw.rect(
                 self.screen,
                 (255, 255, 255),
-                (self.Width, self.yPoint, self.hallwaySize, self.Height),
+                (self.WidthNoHallway, self.HeightHallway, self.hallwaySize, self.HeightNoHallway),
             )
         if self.hallwayDirection[3] == 1:
             pygame.draw.rect(
                 self.screen,
                 (255, 255, 255),
-                (0, self.Height, self.Width, self.hallwaySize),
+                (0, self.HeightNoHallway, self.WidthNoHallway, self.hallwaySize),
             )
 
         if self.ID == 0:
@@ -84,24 +84,65 @@ class room:
                 ),
             )
 
-    def collision(self, playerPos, direction):
+    def collision(self, playerPos):
+        Colliding = False
+        if self.ID in (1, 2, 3, 4, 11, 12, 13, 14, 15):
+            if self.hallwayDirection[0] == 1:
+                if (
+                    (
+                        playerPos[1] >= self.offset 
+                        and 
+                        playerPos[0] >= self.offset
+                    ) 
+                    or 
+                    (
+                        playerPos[1] >= 0 
+                        and 
+                        playerPos[0] >= self.WidthNoHallway 
+                        and
+                        playerPos[0] + self.playerSize[0] <= self.WidthHallway
+                    )
+                    or 
+                    (
+                        playerPos[1] >= self.offset 
+                        and 
+                        playerPos[0] >= self.WidthHallway 
+                        and
+                        playerPos[0] + self.playerSize[0] <= self.screenX - self.offset
+                    )
+                ):
+                    Colliding = False
+                else:
+                    Colliding = True
+            if self.hallwayDirection[1] == 1:
+                pass
+            if self.hallwayDirection[2] == 1:
+                pass
+            if self.hallwayDirection[3] == 1:
+                pass
+        else:
+            pass
+        
+        return Colliding
+
+
+
+    """def collision(self, playerPos, direction):
 
         Colliding = False
         print(self.offset)
 
         if direction == "w":
-            if self.ID in (1, 2, 3, 4, 11, 12, 13, 14, 15) and playerPos[1] >= self.offset:
-                Colliding = False
-            elif self.hallwayDirection[0] == 1 and playerPos[1] >= 0:
-                Colliding = False
-            elif self.hallwayDirection[1] == 1 and playerPos[1] >= self.Height:
-                Colliding = False
-            elif self.hallwayDirection[2] == 1 and playerPos[1] >= 0:
-                Colliding = False
-            elif self.hallwayDirection[3] == 1 and playerPos[1] >= self.Height:
-                Colliding = False
-            else:
-                Colliding = True
+            if self.hallwayDirection[0] == 1:
+                if playerPos[1]:
+                    pass
+                pass
+            if self.hallwayDirection[1] == 1:
+                pass
+            if self.hallwayDirection[3] == 1:
+                pass
+
+            pass
         if direction == "a":
             pass
         if direction == "s":
@@ -109,7 +150,20 @@ class room:
         if direction == "d":
             pass
 
-
+        
+        if self.ID in (1, 2, 3, 4, 11, 12, 13, 14, 15) and playerPos[1] >= self.offset:
+                Colliding = False
+            elif self.hallwayDirection[0] == 1 and playerPos[1] >= 0:
+                Colliding = False
+            elif self.hallwayDirection[1] == 1 and playerPos[1] <= self.HeightNoHallway:
+                Colliding = False
+            elif self.hallwayDirection[2] == 1 and playerPos[1] >= 0:
+                Colliding = False
+            elif self.hallwayDirection[3] == 1 and playerPos[1] <= self.HeightNoHallway:
+                Colliding = False
+            else:
+                Colliding = True
+        
 
         if self.ID in (1, 2, 3, 4, 11, 12, 13, 14, 15):
             if (
@@ -123,11 +177,11 @@ class room:
                 Colliding = True
         if self.hallwayDirection[0] == 1:
             if (
-                playerPos[0] >= self.Width
+                playerPos[0] >= self.WidthNoHallway
                 and playerPos[1] >= 0
                 and playerPos[0] + self.playerSize[0]
-                <= self.Width + self.hallwaySize
-                and playerPos[1] + self.playerSize[1] <= self.Height
+                <= self.WidthNoHallway + self.hallwaySize
+                and playerPos[1] + self.playerSize[1] <= self.HeightNoHallway
             ):
                 Colliding = False
                 print("3")
@@ -136,11 +190,11 @@ class room:
                 print("4")
         if self.hallwayDirection[1] == 1:
             if (
-                playerPos[0] >= self.Width + self.hallwaySize
-                and playerPos[1] >= self.Height
+                playerPos[0] >= self.WidthNoHallway + self.hallwaySize
+                and playerPos[1] >= self.HeightNoHallway
                 and playerPos[0] + self.playerSize[0] <= self.screenX
                 and playerPos[1] + self.playerSize[1]
-                <= self.Height + self.hallwaySize
+                <= self.HeightNoHallway + self.hallwaySize
             ):
                 Colliding = False
                 print("5")
@@ -149,10 +203,10 @@ class room:
                 print("6")
         if self.hallwayDirection[2] == 1:
             if (
-                playerPos[0] >= self.Width
-                and playerPos[1] >= self.Height + self.hallwaySize
+                playerPos[0] >= self.WidthNoHallway
+                and playerPos[1] >= self.HeightNoHallway + self.hallwaySize
                 and playerPos[0] + self.playerSize[0]
-                <= self.Width + self.hallwaySize
+                <= self.WidthNoHallway + self.hallwaySize
                 and playerPos[1] + self.playerSize[1] <= self.screenY
             ):
                 Colliding = False
@@ -163,10 +217,10 @@ class room:
         if self.hallwayDirection[3] == 1:
             if (
                 playerPos[0] >= 0
-                and playerPos[1] >= self.Height
-                and playerPos[0] + self.playerSize[0] <= self.Width
+                and playerPos[1] >= self.HeightNoHallway
+                and playerPos[0] + self.playerSize[0] <= self.WidthNoHallway
                 and playerPos[1] + self.playerSize[1]
-                <= self.Height + self.hallwaySize
+                <= self.HeightNoHallway + self.hallwaySize
             ):
                 Colliding = False
                 print("9")
@@ -174,4 +228,4 @@ class room:
                 Colliding = True
                 print("0")
 
-        return Colliding
+        return Colliding"""
