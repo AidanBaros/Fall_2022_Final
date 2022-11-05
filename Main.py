@@ -34,8 +34,7 @@ while True:
 player = pygame.Rect(screenX // 2, screenY // 2, 50, 100)
 
 PlayerSpeed = int(screenX // 750)
-print(screenX)
-print(PlayerSpeed)
+PlayerSpeed = 7
 
 for i in range(YTC):
     roomList.append([])
@@ -72,16 +71,16 @@ while Running:
     if keys[pygame.K_LCTRL]:
         Running = False
 
-    if player.x == 0 and grid[MapYPos][MapXPos].tile.sides[3] == 1:
+    if player.x == 1 and grid[MapYPos][MapXPos].tile.sides[3] == 1:
         MapXPos -= 1
         player.x = screenX - player.w - 10
-    if player.x == screenX - player.w and grid[MapYPos][MapXPos].tile.sides[1] == 1:
+    if player.x == screenX - player.w - 1 and grid[MapYPos][MapXPos].tile.sides[1] == 1:
         MapXPos += 1
         player.x = 10
-    if player.y == 0 and grid[MapYPos][MapXPos].tile.sides[0] == 1:
+    if player.y == 1 and grid[MapYPos][MapXPos].tile.sides[0] == 1:
         MapYPos -= 1
         player.y = screenY - player.h - 10
-    if player.y == screenY - player.h and grid[MapYPos][MapXPos].tile.sides[2] == 1:
+    if player.y == screenY - player.h - 1 and grid[MapYPos][MapXPos].tile.sides[2] == 1:
         MapYPos += 1
         player.y = 10
 
@@ -90,25 +89,25 @@ while Running:
     if (
         keys[pygame.K_a]
         and player.left >= 0
-        and roomList[MapYPos][MapXPos].collision(player)
+        and roomList[MapYPos][MapXPos].collision(player,"a") == False
     ):
         player.x -= PlayerSpeed
     if (
         keys[pygame.K_d]
         and player.right <= screenX
-        and roomList[MapYPos][MapXPos].collision(player)
+        and roomList[MapYPos][MapXPos].collision(player,"d") == False
     ):
         player.x += PlayerSpeed
     if (
         keys[pygame.K_w]
         and player.top >= 0
-        and roomList[MapYPos][MapXPos].collision(player)
+        and roomList[MapYPos][MapXPos].collision(player,"w") == False
     ):
         player.y -= PlayerSpeed
     if (
         keys[pygame.K_s]
         and player.bottom <= screenY
-        and roomList[MapYPos][MapXPos].collision(player)
+        and roomList[MapYPos][MapXPos].collision(player,"s") == False
     ):
         player.y += PlayerSpeed
 
