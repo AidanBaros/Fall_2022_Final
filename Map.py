@@ -151,13 +151,13 @@ def makeGrid(screenX, screenY, screen, XTC, YTC) -> list[Space]:
     global grid
     done = False
     grid = []
-    XTC = 15
-    YTC = 10
+    XTC = XTC
+    YTC = YTC
     sizeY = screenY // YTC
     offset = (screenX - (sizeY * XTC)) // 2
     sizeX = sizeY
-
-    for i in range(int(screenY / sizeY)):
+    print(int(screenY / sizeY))
+    for i in range(YTC):
         grid.append([])
         for j in range(XTC):
             grid[i].append(Space((j * sizeX) + offset, i * sizeY, sizeY, screen))
@@ -169,6 +169,6 @@ def makeGrid(screenX, screenY, screen, XTC, YTC) -> list[Space]:
 
 
 def start(screenY, XTC, YTC):
-    for i in range(int(screenY / (screenY // YTC))):
+    for i in range(YTC):
         for j in range(XTC):
             grid[i][j].draw()

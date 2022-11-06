@@ -13,7 +13,7 @@ screenX, screenY = screen.get_size()
 Running = True
 
 YTC = 10
-XTC = int(YTC * 1.5)
+XTC = 15
 
 roomList: list[room] = []
 
@@ -22,8 +22,15 @@ grid = makeGrid(screenX, screenY, screen, XTC, YTC)
 ranX = random.randint(0, XTC - 1)
 ranY = random.randint(0, YTC - 1)
 
+print(f"{ranY}, {ranX}")
+
+for i in range(YTC):
+    for j in range(XTC):
+        print(grid[i][j].tile.ID, end=",")
+    print()
+
 while True:
-    if grid[ranY][ranX].tile.sides == [0, 0, 0, 0]:
+    if grid[ranY][ranX].tile.ID == 0:
         ranX = random.randint(0, XTC)
         ranY = random.randint(0, YTC)
     else:
@@ -84,8 +91,6 @@ while Running:
         MapYPos += 1
         player.y = 10
 
-    # player.colliderect(roomList[MapYPos][MapXPos].center_square)
-
     if (
         keys[pygame.K_a]
         and player.left >= 0
@@ -110,5 +115,31 @@ while Running:
         and roomList[MapYPos][MapXPos].collision(player,"s") == False
     ):
         player.y += PlayerSpeed
+
+    if (
+        keys[pygame.K_w] 
+        and 
+        roomList[MapYPos][MapXPos].collision(player,"w") == True
+        ):
+        player.y = roomList[MapYPos][MapXPos].collision(player,"w2")
+    if (
+        keys[pygame.K_s] 
+        and 
+        roomList[MapYPos][MapXPos].collision(player,"s") == True
+        ):
+        player.y = roomList[MapYPos][MapXPos].collision(player,"s2")
+    if (
+        keys[pygame.K_a] 
+        and
+        roomList[MapYPos][MapXPos].collision(player,"a") == True
+        ):
+        player.x = roomList[MapYPos][MapXPos].collision(player,"a2")
+    if (
+        keys[pygame.K_d] 
+        and 
+        roomList[MapYPos][MapXPos].collision(player,"d") == True
+        ):
+        player.x = roomList[MapYPos][MapXPos].collision(player,"d2")
+    
 
     pygame.display.flip()

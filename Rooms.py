@@ -31,6 +31,19 @@ class room:
         self.offset = 0
         self.color = (255, 255, 255)
 
+        self.w2 = False
+        self.a2 = False
+        self.s2 = False
+        self.d2 = False
+        self.colliding = False
+        self.collidingX = False
+        self.collidingY = False
+        self.collidingW = False
+        self.collidingA = False
+        self.collidingS = False
+        self.collidingD = False
+        
+
         if self.ID == 0:
             self.color = (0, 0, 0)
         elif self.ID == 1 or self.ID == 2 or self.ID == 3 or self.ID == 4:
@@ -152,6 +165,26 @@ class room:
             (255, 255, 255),
             self.center_square,
         )
+        pygame.draw.rect(
+            self.screen,
+            (0, 0, 250),
+            self.NoRoomBL,
+        )
+        pygame.draw.rect(
+            self.screen,
+            (0, 0, 200),
+            self.NoRoomBR,
+        )
+        pygame.draw.rect(
+            self.screen,
+            (0, 0, 150),
+            self.NoRoomTL,
+        )
+        pygame.draw.rect(
+            self.screen,
+            (0, 0, 100),
+            self.NoRoomTR,
+        )
         if self.hallwayDirection[0] == 1:
             pygame.draw.rect(
                 self.screen,
@@ -176,7 +209,6 @@ class room:
                 (255, 255, 255),
                 self.left_hallway,
             )
-
         if self.ID not in (5, 6, 7, 8, 9, 10):
             pygame.draw.rect(
                 self.screen,
@@ -267,57 +299,222 @@ class room:
                     player.colliderect(self.TL.left)
                 )
         else:
+            if self.hallwayDirection[0] == 0:
+                self.NoRoomTL.width = self.WidthHallway
+            if self.hallwayDirection[1] == 0:
+                self.NoRoomTR.height = self.HeightHallway
+            if self.hallwayDirection[2] == 0:
+                self.NoRoomBR.x = self.WidthNoHallway
+                self.NoRoomBR.width = self.WidthHallway
+            if self.hallwayDirection[3] == 0:
+                self.NoRoomBL.y = self.HeightNoHallway
+                self.NoRoomBL.height = self.HeightHallway
+            test = False
+            def testPrint():
+                print(self.w2,end=", w\n")
+                print(self.a2,end=", a\n")
+                print(self.s2,end=", s\n")
+                print(self.d2,end=", d\n")
+                print()
+            if (player.top == self.NoRoomTL.bottom
+                or 
+                player.top == self.NoRoomTR.bottom
+                ):
+                self.w2 = True
+            else:
+                self.w2 = False
+            if (player.left == self.NoRoomTL.right
+                or 
+                player.left == self.NoRoomBL.right
+                ):
+                self.a2 = True
+            else:
+                self.a2 = False
+            if (player.bottom == self.NoRoomBR.top
+                or 
+                player.bottom == self.NoRoomBL.top
+                ):
+                self.s2 = True
+            else:
+                self.s2 = False
+            if (player.right == self.NoRoomBR.left
+                or 
+                player.right == self.NoRoomTR.left
+                ):
+                self.d2 = True
+            else:
+                self.d2 = False
+            
+            print("---------")
+            testPrint()
             if direction == "w":
-                print("w2")
-                print(
-                    player.colliderect(self.NoRoomTL.bottom) 
-                    or 
-                    player.colliderect(self.NoRoomTR.bottom)
-                )
-                return(
-                    player.colliderect(self.NoRoomTL.bottom) 
-                    or 
-                    player.colliderect(self.NoRoomTR.bottom)
-                )
+                self.w2 = False
+                if (player.bottomright[0] <= self.NoRoomTL.bottomright[0]):
+                    if (player.top >= self.NoRoomTL.bottom):
+                        self.w2 = False
+                    elif (self.w2 == False and self.a2 == False and self.s2 == False and self.d2 == False):
+                        self.w2 = True
+                        player.top = self.NoRoomTL.bottom
+                        if test: print("w2,2")
+                if (player.bottomleft[0] >= self.NoRoomTR.bottomleft[0]):
+                    if (player.top >= self.NoRoomTR.bottom):
+                        self.w2 = False
+                    elif (self.w2 == False and self.a2 == False and self.s2 == False and self.d2 == False):
+                        self.w2 = True
+                        player.top = self.NoRoomTR.bottom
+                        if test: print("w2,4")
+                testPrint()
+                return(self.w2)
+            elif direction == "w2":
+                return player.y
             if direction == "a":
-                print("a2")
-                print(
-                    player.colliderect(self.NoRoomTL.right) 
-                    or 
-                    player.colliderect(self.NoRoomBL.right)
-                )
-                return(
-                    player.colliderect(self.NoRoomTL.right) 
-                    or 
-                    player.colliderect(self.NoRoomBL.right)
-                )
+                self.a2 = False
+                if (player.topright[1] <= self.NoRoomTL.bottomright[1]):
+                    if (player.left >= self.NoRoomTL.right):
+                        self.a2 = False
+                    elif (self.w2 == False and self.a2 == False and self.s2 == False and self.d2 == False):
+                        self.a2 = True
+                        player.left = self.NoRoomTL.right
+                        if test: print("a2,2")
+                if (player.bottomright[1] >= self.NoRoomBL.topright[1]):
+                    if (player.left >= self.NoRoomBL.right):
+                        self.a2 = False
+                    elif (self.w2 == False and self.a2 == False and self.s2 == False and self.d2 == False):
+                        self.a2 = True
+                        player.left = self.NoRoomBL.right
+                        if test: print("a2,4")
+                testPrint()
+                return(self.a2)
+            elif direction == "a2":
+                return player.x
             if direction == "s":
-                print("s2")
-                print(
-                    player.colliderect(self.NoRoomBR.top) 
-                    or 
-                    player.colliderect(self.NoRoomBL.top)
-                )
-                return(
-                    player.colliderect(self.NoRoomBR.top) 
-                    or 
-                    player.colliderect(self.NoRoomBL.top)
-                )
+                self.s2 = False
+                if (player.topleft[0] >= self.NoRoomBR.topleft[0]):
+                    if (player.bottom <= self.NoRoomBR.top):
+                        self.s2 = False
+                    elif (self.w2 == False and self.a2 == False and self.s2 == False and self.d2 == False):
+                        self.s2 = True
+                        player.bottom = self.NoRoomBR.top
+                        if test: print("s2,2")
+                if (player.topright[0] <= self.NoRoomBL.topright[0]):
+                    if (player.bottom <= self.NoRoomBL.top):
+                        self.s2 = False
+                    elif (self.w2 == False and self.a2 == False and self.s2 == False and self.d2 == False):
+                        self.s2 = True
+                        player.bottom = self.NoRoomBL.top
+                        if test: print("s2,4")
+                testPrint()
+                return(self.s2)
+            elif direction == "s2":
+                return player.y
             if direction == "d":
-                print("d2")
-                print(
-                    player.colliderect(self.NoRoomBR.left) 
-                    or 
-                    player.colliderect(self.NoRoomTR.left)
-                )
-                return(
-                    player.colliderect(self.NoRoomBR.left) 
-                    or 
-                    player.colliderect(self.NoRoomTR.left)
-                )
+                self.d2 = False
+                if (player.bottomleft[1] >= self.NoRoomBR.topleft[1]):
+                    if (player.right <= self.NoRoomBR.left):
+                        self.d2 = False
+                    elif (self.w2 == False and self.a2 == False and self.s2 == False and self.d2 == False):
+                        self.d2 = True
+                        player.right = self.NoRoomBR.left
+                        if test: print("d2,2")
+                if (player.topleft[1] <= self.NoRoomTR.bottomleft[1]):
+                    if (player.right <= self.NoRoomTR.left):
+                        self.d2 = False
+                    elif (self.w2 == False and self.a2 == False and self.s2 == False and self.d2 == False):
+                        self.d2 = True
+                        player.right = self.NoRoomTR.left
+                        if test: print("d2,4")
+                testPrint()
+                return(self.d2)
+            elif direction == "d2":
+                return player.x
+            
                 
 
     """
+    if direction == "w":
+                self.w2 = False
+                if (player.bottomright[0] <= self.NoRoomTL.bottomright[0]):
+                    if self.collidingY == False and self.collidingS == False:
+                        player.top = self.NoRoomTL.bottom
+                        self.w2 = True
+                        self.collidingY = True
+                        self.collidingW = True
+                        if test: print("w2,2")
+                    elif (player.top >= self.NoRoomTL.bottom):
+                        self.w2 = False
+                        self.collidingY = False
+                        self.collidingS = False
+                if (player.bottomleft[0] >= self.NoRoomTR.bottomleft[0]):
+                    if self.collidingY == False and self.collidingS == False:
+                        player.top = self.NoRoomTR.bottom
+                        self.w2 = True
+                        self.collidingY = True
+                        self.collidingW = True
+                        if test: print("w2,4")
+                    elif (player.top >= self.NoRoomTR.bottom):
+                        self.w2 = False
+                        self.collidingY = False
+                        self.collidingS = False
+                print(self.collidingY,end=", ")
+                print("w\n")
+                return(self.w2)
+            elif direction == "w2":
+                return player.y
+
+    w2 = (
+                        (
+                            player.top > self.NoRoomTL.bottom 
+                            and 
+                            player.topright < self.NoRoomTL.bottomright
+                        ) 
+                        or 
+                        (
+                            player.top > self.NoRoomTR.bottom 
+                            and 
+                            player.topleft > self.NoRoomTR.bottomleft
+                        )
+                    )
+    a2 = (
+                        (
+                            player.left > self.NoRoomTL.right
+                            and 
+                            player.bottomleft < self.NoRoomTL.bottomright
+                        ) 
+                        or 
+                        (
+                            player.left > self.NoRoomBL.right
+                            and 
+                            player.topleft > self.NoRoomBL.topright
+                        )
+                    )
+    s2 = (
+                        (
+                            player.bottom < self.NoRoomBR.top
+                            and 
+                            player.bottomleft > self.NoRoomBR.topleft
+                        ) 
+                        or 
+                        (
+                            player.bottom < self.NoRoomBL.top
+                            and 
+                            player.bottomright < self.NoRoomBL.topright
+                        )
+                    )
+    d2 = (
+                        (
+                            player.right < self.NoRoomBR.left
+                            and 
+                            player.topright > self.NoRoomBR.topleft
+
+                        ) 
+                        or 
+                        (
+                            player.right < self.NoRoomTR.left
+                            and 
+                            player.bottomright < self.NoRoomTR.bottomleft
+                        )
+                    )
+
     return (
                 (player.colliderect(self.main_room))
                 or (player.colliderect(self.center_square))
