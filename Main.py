@@ -41,18 +41,15 @@ while True:
 player = pygame.Rect(screenX // 2, screenY // 2, 50, 100)
 
 PlayerSpeed = int(screenX // 750)
-PlayerSpeed = 7
+#PlayerSpeed = 7
 
 for i in range(YTC):
     roomList.append([])
     for j in range(XTC):
         roomList[i].append(
             room(
-                0,
-                grid[i][j].tile.sides,
-                grid[i][j].tile.ID,
-                screenX,
-                screenY,
+                grid[i][j].tile,
+                (screenX, screenY),
                 screen,
                 (player.width, player.height),
             )
