@@ -156,7 +156,6 @@ def makeGrid(screenX, screenY, screen, XTC, YTC) -> list[Space]:
     sizeY = screenY // YTC
     offset = (screenX - (sizeY * XTC)) // 2
     sizeX = sizeY
-    print(int(screenY / sizeY))
     for i in range(YTC):
         grid.append([])
         for j in range(XTC):

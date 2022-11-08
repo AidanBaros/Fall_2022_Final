@@ -12,7 +12,7 @@ class room:
         screen,
         playerSize,
     ):
-        self.hallwayDirection = tile.hallwayDirection
+        self.hallwayDirection = tile.sides
         self.ID = tile.ID
         self.screenX = screenSize[0]
         self.screenY = screenSize[1]
@@ -30,109 +30,237 @@ class room:
         self.offset = 0
         self.color = (255, 255, 255)
 
-        """self.w2 = False
-        self.a2 = False
-        self.s2 = False
-        self.d2 = False
-        self.colliding = False
-        self.collidingX = False
-        self.collidingY = False
-        self.collidingW = False
-        self.collidingA = False
-        self.collidingS = False
-        self.collidingD = False"""
+        #SET OFFSET
+        if self.ID == 1:
+            self.offset = 200
+        elif self.ID == 2:
+            self.offset = 200
+        elif self.ID == 3:
+            self.offset = 200
+        elif self.ID == 4:
+            self.offset = 200
+        elif self.ID == 11:
+            self.offset = 300
+        elif self.ID == 12:
+            self.offset = 300
+        elif self.ID == 13:
+            self.offset = 300
+        elif self.ID == 14:
+            self.offset = 300
+        elif self.ID == 15:
+            self.offset = 100
 
-        if self.ID in self.RoomNo:
-            self.CornerTL = pygame.Rect(
-                0,
-                0,
-                self.WidthNoHallway,
-                self.HeightNoHallway,
-            )
-            self.CornerTR = pygame.Rect(
-                self.WidthHallway,
-                0,
-                self.WidthNoHallway,
-                self.HeightNoHallway,
-            )
-            self.CornerBR = pygame.Rect(
-                self.WidthHallway,
-                self.HeightHallway,
-                self.WidthNoHallway,
-                self.HeightNoHallway,
-            )
-            self.CornerBL = pygame.Rect(
-                0,
-                self.HeightHallway,
-                self.WidthNoHallway,
-                self.HeightNoHallway,
-            )
-            self.Top = pygame.Rect(
-                0,
-                0,
-                self.screenX,
-                self.HeightNoHallway - playerSize[1] + (playerSize[1] // 4),
-            )
-            self.Bottom = pygame.Rect(
-                0,
-                self.HeightHallway,
-                self.screenX,
-                self.HeightNoHallway,
-            )
-            self.Left = pygame.Rect(
-                0,
-                0,
-                self.WidthNoHallway,
-                self.screenY,
-            )
-            self.Right = pygame.Rect(
-                0,
-                self.WidthHallway,
-                self.WidthNoHallway,
-                self.screenY,
-            )
 
-            if self.ID == 5:
-                self.collisionBoxList.append(self.Top)
-                self.collisionBoxList.append(self.Bottom)
-            elif self.ID == 6:
-                self.collisionBoxList.append(self.Left)
-                self.collisionBoxList.append(self.Right)
-            elif self.ID == 7:
-                self.collisionBoxList.append(self.CornerTR)
-                self.collisionBoxList.append(self.Bottom)
-                self.collisionBoxList.append(self.Left)
-            elif self.ID == 8:
-                self.collisionBoxList.append(self.CornerBR)
-                self.collisionBoxList.append(self.Top)
-                self.collisionBoxList.append(self.Left)
-            elif self.ID == 9:
-                self.collisionBoxList.append(self.CornerBL)
-                self.collisionBoxList.append(self.Top)
-                self.collisionBoxList.append(self.Right)
-            elif self.ID == 10:
-                self.collisionBoxList.append(self.CornerTL)
-                self.collisionBoxList.append(self.Bottom)
-                self.collisionBoxList.append(self.Right)
-        else:
-            if self.ID == 1:
-                self.offset = 200
-            elif self.ID == 2:
-                self.offset = 200
-            elif self.ID == 3:
-                self.offset = 200
-            elif self.ID == 4:
-                self.offset = 200
-            elif self.ID == 11:
-                self.offset = 300
-            elif self.ID == 12:
-                self.offset = 300
-            elif self.ID == 13:
-                self.offset = 300
-            elif self.ID == 14:
-                self.offset = 300
-            elif self.ID == 15:
-                self.offset = 100
+        #COLLISION BOXS
+        self.CornerTL = pygame.Rect(
+            0,
+            0,
+            self.WidthNoHallway,
+            self.HeightNoHallway - playerSize[1] + (playerSize[1] // 4),
+        )
+        self.CornerTR = pygame.Rect(
+            self.WidthHallway,
+            0,
+            self.WidthNoHallway,
+            self.HeightNoHallway - playerSize[1] + (playerSize[1] // 4),
+        )
+        self.CornerBR = pygame.Rect(
+            self.WidthHallway,
+            self.HeightHallway,
+            self.WidthNoHallway,
+            self.HeightNoHallway,
+        )
+        self.CornerBL = pygame.Rect(
+            0,
+            self.HeightHallway,
+            self.WidthNoHallway,
+            self.HeightNoHallway,
+        )
+        self.TopNR = pygame.Rect(
+            0,
+            0,
+            self.screenX,
+            self.HeightNoHallway - playerSize[1] + (playerSize[1] // 4),
+        )
+        self.BottomNR = pygame.Rect(
+            0,
+            self.HeightHallway,
+            self.screenX,
+            self.HeightNoHallway,
+        )
+        self.LeftNR = pygame.Rect(
+            0,
+            0,
+            self.WidthNoHallway,
+            self.screenY,
+        )
+        self.RightNR = pygame.Rect(
+            self.WidthHallway,
+            0,
+            self.WidthNoHallway,
+            self.screenY,
+        )
+        
+        self.TLT = pygame.Rect(
+            0,
+            0,
+            self.WidthNoHallway,
+            self.offset,
+        )
+        self.TLL = pygame.Rect(
+            0,
+            0,
+            self.offset,
+            self.HeightNoHallway,
+        )
+        self.TRT = pygame.Rect(
+            self.WidthHallway,
+            0,
+            self.WidthNoHallway,
+            self.offset,
+        )
+        self.TRR = pygame.Rect(
+            self.screenX - self.offset,
+            0,
+            self.offset,
+            self.HeightNoHallway,
+        )
+        self.BRR = pygame.Rect(
+            self.screenX - self.offset,
+            self.HeightHallway,
+            self.offset,
+            self.HeightNoHallway,
+        )
+        self.BRB = pygame.Rect(
+            self.WidthHallway,
+            self.screenY - self.offset,
+            self.WidthNoHallway,
+            self.offset,
+        )
+        self.BLL = pygame.Rect(
+            0,
+            self.HeightHallway,
+            self.offset,
+            self.HeightNoHallway,
+        )
+        self.BLB = pygame.Rect(
+            0,
+            self.screenY - self.offset,
+            self.WidthNoHallway,
+            self.offset,
+        )
+        self.TopR = pygame.Rect(
+            0,
+            0,
+            self.screenX,
+            self.offset - playerSize[1] + (playerSize[1] // 4),
+        )
+        self.BottomR = pygame.Rect(
+            0,
+            self.screenY - self.offset,
+            self.screenX,
+            self.offset,
+        )
+        self.LeftR = pygame.Rect(
+            0,
+            0,
+            self.offset,
+            self.screenY,
+        )
+        self.RightR = pygame.Rect(
+            self.screenX - self.offset,
+            0,
+            self.offset,
+            self.screenY,
+        )
+
+        if self.ID == 1:
+            self.collisionBoxList.append(self.TLT)
+            self.collisionBoxList.append(self.TLL)
+            self.collisionBoxList.append(self.TRT)
+            self.collisionBoxList.append(self.TRR)
+            self.collisionBoxList.append(self.BLL)
+            self.collisionBoxList.append(self.BRR)
+            self.collisionBoxList.append(self.BottomR)
+        elif self.ID == 2:
+            self.collisionBoxList.append(self.BRR)
+            self.collisionBoxList.append(self.BRB)
+            self.collisionBoxList.append(self.TRT)
+            self.collisionBoxList.append(self.TRR)
+            self.collisionBoxList.append(self.BLB)
+            self.collisionBoxList.append(self.TLT)
+            self.collisionBoxList.append(self.LeftR)
+        elif self.ID == 3:
+            self.collisionBoxList.append(self.BLL)
+            self.collisionBoxList.append(self.BLB)
+            self.collisionBoxList.append(self.BRR)
+            self.collisionBoxList.append(self.BRB)
+            self.collisionBoxList.append(self.TLL)
+            self.collisionBoxList.append(self.TRR)
+            self.collisionBoxList.append(self.TopR)
+        elif self.ID == 4:
+            self.collisionBoxList.append(self.TLT)
+            self.collisionBoxList.append(self.TLL)
+            self.collisionBoxList.append(self.BLL)
+            self.collisionBoxList.append(self.BLB)
+            self.collisionBoxList.append(self.TRT)
+            self.collisionBoxList.append(self.BRB)
+            self.collisionBoxList.append(self.RightR)
+        elif self.ID == 5:
+            self.collisionBoxList.append(self.TopNR)
+            self.collisionBoxList.append(self.BottomNR)
+        elif self.ID == 6:
+            self.collisionBoxList.append(self.LeftNR)
+            self.collisionBoxList.append(self.RightNR)
+        elif self.ID == 7:
+            self.collisionBoxList.append(self.CornerTR)
+            self.collisionBoxList.append(self.BottomNR)
+            self.collisionBoxList.append(self.LeftNR)
+        elif self.ID == 8:
+            self.collisionBoxList.append(self.CornerBR)
+            self.collisionBoxList.append(self.TopNR)
+            self.collisionBoxList.append(self.LeftNR)
+        elif self.ID == 9:
+            self.collisionBoxList.append(self.CornerBL)
+            self.collisionBoxList.append(self.TopNR)
+            self.collisionBoxList.append(self.RightNR)
+        elif self.ID == 10:
+            self.collisionBoxList.append(self.CornerTL)
+            self.collisionBoxList.append(self.BottomNR)
+            self.collisionBoxList.append(self.RightNR)
+        elif self.ID == 11:
+            self.collisionBoxList.append(self.TLT)
+            self.collisionBoxList.append(self.TRT)
+            self.collisionBoxList.append(self.RightR)
+            self.collisionBoxList.append(self.LeftR)
+            self.collisionBoxList.append(self.BottomR)
+        elif self.ID == 12:
+            self.collisionBoxList.append(self.BRR)
+            self.collisionBoxList.append(self.TRR)
+            self.collisionBoxList.append(self.LeftR)
+            self.collisionBoxList.append(self.BottomR)
+            self.collisionBoxList.append(self.TopR)
+        elif self.ID == 13:
+            self.collisionBoxList.append(self.BRB)
+            self.collisionBoxList.append(self.BLB)
+            self.collisionBoxList.append(self.RightR)
+            self.collisionBoxList.append(self.LeftR)
+            self.collisionBoxList.append(self.TopR)
+        elif self.ID == 14:
+            self.collisionBoxList.append(self.TLL)
+            self.collisionBoxList.append(self.BLL)
+            self.collisionBoxList.append(self.RightR)
+            self.collisionBoxList.append(self.BottomR)
+            self.collisionBoxList.append(self.TopR)
+        elif self.ID == 15:
+            self.collisionBoxList.append(self.TLT)
+            self.collisionBoxList.append(self.TLL)
+            self.collisionBoxList.append(self.BRR)
+            self.collisionBoxList.append(self.BRB)
+            self.collisionBoxList.append(self.TRR)
+            self.collisionBoxList.append(self.TRT)
+            self.collisionBoxList.append(self.BLL)
+            self.collisionBoxList.append(self.BLB)
 
         # Playable area rects
         self.center_square = pygame.Rect(
@@ -165,108 +293,25 @@ class room:
         self.left_hallway = pygame.Rect(
             0, self.HeightNoHallway, self.WidthNoHallway, self.hallwaySize
         )
-        """# No Room collision rects
-        self.NoRoomTL = pygame.Rect(
-            0,
-            0,
-            self.WidthNoHallway,
-            self.HeightNoHallway - playerSize[1] + (playerSize[1] // 4),
-        )
-        self.NoRoomTR = pygame.Rect(
-            self.WidthHallway,
-            0,
-            self.WidthNoHallway,
-            self.HeightNoHallway - playerSize[1] + (playerSize[1] // 4),
-        )
-        self.NoRoomBL = pygame.Rect(
-            0,
-            self.HeightHallway,
-            self.WidthNoHallway,
-            self.HeightNoHallway,
-        )
-        self.NoRoomBR = pygame.Rect(
-            self.WidthHallway,
-            self.HeightHallway,
-            self.WidthNoHallway,
-            self.HeightNoHallway,
-        )
-        # Room collision rects
-        self.TL = pygame.Rect(
-            0,
-            0,
-            self.WidthNoHallway,
-            self.offset,
-        )
-        self.TR = pygame.Rect(
-            self.WidthHallway,
-            0,
-            self.WidthNoHallway,
-            self.offset,
-        )
-        self.RT = pygame.Rect(
-            self.screenX - self.offset,
-            0,
-            self.offset,
-            self.WidthNoHallway,
-        )
-        self.RB = pygame.Rect(
-            self.screenX - self.offset,
-            self.HeightHallway,
-            self.offset,
-            self.WidthNoHallway,
-        )
-        self.BR = pygame.Rect(
-            self.WidthHallway,
-            self.screenY - self.offset,
-            self.WidthNoHallway,
-            self.offset,
-        )
-        self.BL = pygame.Rect(
-            0,
-            self.screenY - self.offset,
-            self.WidthNoHallway,
-            self.offset,
-        )
-        self.LB = pygame.Rect(
-            0,
-            self.HeightHallway,
-            self.offset,
-            self.WidthNoHallway,
-        )
-        self.LT = pygame.Rect(
-            0,
-            0,
-            self.offset,
-            self.WidthNoHallway,
-        )"""
+
 
     def draw(self):
         self.screen.fill((0, 0, 0))
+        for i in range(len(self.collisionBoxList)):
+            pygame.draw.rect(
+                self.screen,
+                (
+                    50 + (25*i),
+                    50 + (25*i),
+                    50 + (25*i),
+                ),
+                self.collisionBoxList[i],
+            )
         pygame.draw.rect(
             self.screen,
             (255, 255, 255),
             self.center_square,
         )
-        """pygame.draw.rect(
-            self.screen,
-            (0, 0, 250),
-            self.NoRoomBL,
-        )
-        pygame.draw.rect(
-            self.screen,
-            (0, 0, 200),
-            self.NoRoomBR,
-        )
-        pygame.draw.rect(
-            self.screen,
-            (0, 0, 150),
-            self.NoRoomTL,
-        )
-        pygame.draw.rect(
-            self.screen,
-            (0, 0, 100),
-            self.NoRoomTR,
-        )"""
         if self.hallwayDirection[0] == 1:
             pygame.draw.rect(
                 self.screen,
@@ -297,9 +342,25 @@ class room:
                 self.color,
                 self.main_room,
             )
+        
 
-    def collision(self, player: pygame.Rect):
-        pass
+    def collision(self, player: pygame.Rect, PlayerSpeed):
+        for i in self.collisionBoxList:
+            if player.colliderect(i):
+                if (player.top < i.bottom and player.top + PlayerSpeed > i.bottom):
+                    player.top = i.bottom
+                elif (player.left < i.right and player.left + PlayerSpeed > i.right):
+                    player.left = i.right
+                elif (player.bottom > i.top and player.bottom - PlayerSpeed< i.top):
+                    player.bottom = i.top
+                elif (player.right > i.left and player.right - PlayerSpeed < i.left):
+                    player.right = i.left
+                return True
+            return False
+            
+            
+
+
 
     """def collision(self, player: pygame.Rect, direction):
         if self.ID in (1, 2, 3, 4, 11, 12, 13, 14, 15):
@@ -511,6 +572,94 @@ class room:
                 return player.x"""
 
     """
+
+        # No Room collision rects
+        self.NoRoomTL = pygame.Rect(
+            0,
+            0,
+            self.WidthNoHallway,
+            self.HeightNoHallway - playerSize[1] + (playerSize[1] // 4),
+        )
+        self.NoRoomTR = pygame.Rect(
+            self.WidthHallway,
+            0,
+            self.WidthNoHallway,
+            self.HeightNoHallway - playerSize[1] + (playerSize[1] // 4),
+        )
+        self.NoRoomBL = pygame.Rect(
+            0,
+            self.HeightHallway,
+            self.WidthNoHallway,
+            self.HeightNoHallway,
+        )
+        self.NoRoomBR = pygame.Rect(
+            self.WidthHallway,
+            self.HeightHallway,
+            self.WidthNoHallway,
+            self.HeightNoHallway,
+        )
+        # Room collision rects
+        self.TL = pygame.Rect(
+            0,
+            0,
+            self.WidthNoHallway,
+            self.offset,
+        )
+        self.TR = pygame.Rect(
+            self.WidthHallway,
+            0,
+            self.WidthNoHallway,
+            self.offset,
+        )
+        self.RT = pygame.Rect(
+            self.screenX - self.offset,
+            0,
+            self.offset,
+            self.WidthNoHallway,
+        )
+        self.RB = pygame.Rect(
+            self.screenX - self.offset,
+            self.HeightHallway,
+            self.offset,
+            self.WidthNoHallway,
+        )
+        self.BR = pygame.Rect(
+            self.WidthHallway,
+            self.screenY - self.offset,
+            self.WidthNoHallway,
+            self.offset,
+        )
+        self.BL = pygame.Rect(
+            0,
+            self.screenY - self.offset,
+            self.WidthNoHallway,
+            self.offset,
+        )
+        self.LB = pygame.Rect(
+            0,
+            self.HeightHallway,
+            self.offset,
+            self.WidthNoHallway,
+        )
+        self.LT = pygame.Rect(
+            0,
+            0,
+            self.offset,
+            self.WidthNoHallway,
+        )
+
+        self.w2 = False
+        self.a2 = False
+        self.s2 = False
+        self.d2 = False
+        self.colliding = False
+        self.collidingX = False
+        self.collidingY = False
+        self.collidingW = False
+        self.collidingA = False
+        self.collidingS = False
+        self.collidingD = False
+
     if direction == "w":
                 self.w2 = False
                 if (player.bottomright[0] <= self.NoRoomTL.bottomright[0]):
