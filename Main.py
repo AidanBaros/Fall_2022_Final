@@ -33,18 +33,18 @@ for i in range(YTC):
 while True:
     try:
         if grid[ranY][ranX].tile.ID == 0:
-            pass
+            ranX = random.randint(0, XTC)
+            ranY = random.randint(0, YTC)
         else:
-            MapXPos = ranX
-            MapYPos = ranY
             break
-        print("error1")
     except:
         ranX = random.randint(0, XTC)
         ranY = random.randint(0, YTC)
-        print("error2")
 
-player = pygame.Rect(screenX // 2, screenY // 2, 50, 100)
+MapXPos = ranX
+MapYPos = ranY
+
+player = pygame.Rect(screenX // 2 - 25, screenY // 2 - 50, 50, 100)
 
 PlayerSpeed = int(screenX // 750)
 # PlayerSpeed = 7
@@ -80,68 +80,33 @@ while Running:
                 break
     if keys[pygame.K_LCTRL]:
         Running = False
-    """
-    if player.x == 1 and grid[MapYPos][MapXPos].tile.sides[3] == 1:
+
+    if player.x <= 0 and grid[MapYPos][MapXPos].tile.sides[3] == 1:
         MapXPos -= 1
         player.x = screenX - player.w - 10
-    if player.x == screenX - player.w - 1 and grid[MapYPos][MapXPos].tile.sides[1] == 1:
+        player.y = screenY // 2 - player.height // 2
+    if player.x >= screenX - player.w and grid[MapYPos][MapXPos].tile.sides[1] == 1:
         MapXPos += 1
         player.x = 10
-    if player.y == 1 and grid[MapYPos][MapXPos].tile.sides[0] == 1:
+        player.y = screenY // 2 - player.height // 2
+    if player.y <= 0 and grid[MapYPos][MapXPos].tile.sides[0] == 1:
         MapYPos -= 1
+        player.x = screenX // 2 - player.width // 2
         player.y = screenY - player.h - 10
-    if player.y == screenY - player.h - 1 and grid[MapYPos][MapXPos].tile.sides[2] == 1:
+    if player.y >= screenY - player.h and grid[MapYPos][MapXPos].tile.sides[2] == 1:
         MapYPos += 1
-        player.y = 10"""
+        player.x = screenX // 2 - player.width // 2
+        player.y = 10
 
-    if (
-        keys[pygame.K_a]
-        and player.left >= 0
-        and roomList[MapYPos][MapXPos].collision(player, PlayerSpeed) == False
-    ):
+    if keys[pygame.K_a] and player.left >= 0:
         player.x -= PlayerSpeed
-    if (
-        keys[pygame.K_d]
-        and player.right <= screenX
-        and roomList[MapYPos][MapXPos].collision(player, PlayerSpeed) == False
-    ):
+    if keys[pygame.K_d] and player.right <= screenX:
         player.x += PlayerSpeed
-    if (
-        keys[pygame.K_w]
-        and player.top >= 0
-        and roomList[MapYPos][MapXPos].collision(player, PlayerSpeed) == False
-    ):
+    if keys[pygame.K_w] and player.top >= 0:
         player.y -= PlayerSpeed
-    if (
-        keys[pygame.K_s]
-        and player.bottom <= screenY
-        and roomList[MapYPos][MapXPos].collision(player, PlayerSpeed) == False
-    ):
+    if keys[pygame.K_s] and player.bottom <= screenY:
         player.y += PlayerSpeed
-    """
-    if (
-        keys[pygame.K_w] 
-        and 
-        roomList[MapYPos][MapXPos].collision(player) == True
-        ):
-        player.y = roomList[MapYPos][MapXPos].collision(player)
-    if (
-        keys[pygame.K_s] 
-        and 
-        roomList[MapYPos][MapXPos].collision(player) == True
-        ):
-        player.y = roomList[MapYPos][MapXPos].collision(player)
-    if (
-        keys[pygame.K_a] 
-        and
-        roomList[MapYPos][MapXPos].collision(player) == True
-        ):
-        player.x = roomList[MapYPos][MapXPos].collision(player)
-    if (
-        keys[pygame.K_d] 
-        and 
-        roomList[MapYPos][MapXPos].collision(player) == True
-        ):
-        player.x = roomList[MapYPos][MapXPos].collision(player)"""
+
+    roomList[MapYPos][MapXPos].collision(player, PlayerSpeed)
 
     pygame.display.flip()
