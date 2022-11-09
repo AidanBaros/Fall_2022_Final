@@ -300,7 +300,7 @@ class room:
 
     def draw(self):
         self.screen.fill((0, 0, 0))
-        for i in range(len(self.collisionBoxList)):
+        """for i in range(len(self.collisionBoxList)):
             pygame.draw.rect(
                 self.screen,
                 (
@@ -309,7 +309,7 @@ class room:
                     50 + (25*i),
                 ),
                 self.collisionBoxList[i],
-            )
+            )"""
         pygame.draw.rect(
             self.screen,
             (255, 255, 255),
@@ -350,15 +350,9 @@ class room:
         returnVal = False
         for i in self.collisionBoxList:
             if player.colliderect(i):
-                if player.top < i.bottom and (player.top + PlayerSpeed >= i.bottom):
-                    player.top = i.bottom
-                elif player.left < i.right and (player.left + PlayerSpeed >= i.right):
-                    player.left = i.right
-                elif player.bottom > i.top and (player.bottom - PlayerSpeed <= i.top):
-                    player.bottom = i.top
-                elif player.right > i.left and (player.right - PlayerSpeed <= i.left):
-                    player.right = i.left
+                if player.top < i.bottom and (player.top + PlayerSpeed >= i.bottom): player.top = i.bottom
+                elif player.left < i.right and (player.left + PlayerSpeed >= i.right): player.left = i.right
+                elif player.bottom > i.top and (player.bottom - PlayerSpeed <= i.top): player.bottom = i.top
+                elif player.right > i.left and (player.right - PlayerSpeed <= i.left): player.right = i.left
                 returnVal = True
-
-
         return returnVal
