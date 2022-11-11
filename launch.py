@@ -1,3 +1,4 @@
 from Main import *
 
-main()
+game = Game()
+game.run()
