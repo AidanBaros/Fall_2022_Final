@@ -4,7 +4,7 @@ import random
 pygame.init()
 
 
-class room:
+class Room:
     def __init__(
         self,
         tile,
@@ -346,13 +346,13 @@ class room:
                 self.main_room,
             )
 
-    def collision(self, player: pygame.Rect, PlayerSpeed):
+    def collision(self, player: pygame.Rect):
         returnVal = False
         for i in self.collisionBoxList:
             if player.colliderect(i):
-                if player.top < i.bottom and (player.top + PlayerSpeed >= i.bottom): player.top = i.bottom
-                elif player.left < i.right and (player.left + PlayerSpeed >= i.right): player.left = i.right
-                elif player.bottom > i.top and (player.bottom - PlayerSpeed <= i.top): player.bottom = i.top
-                elif player.right > i.left and (player.right - PlayerSpeed <= i.left): player.right = i.left
+                if player.top < i.bottom and (player.top + 1 >= i.bottom): player.top = i.bottom
+                elif player.left < i.right and (player.left + 1 >= i.right): player.left = i.right
+                elif player.bottom > i.top and (player.bottom - 1 <= i.top): player.bottom = i.top
+                elif player.right > i.left and (player.right - 1 <= i.left): player.right = i.left
                 returnVal = True
         return returnVal

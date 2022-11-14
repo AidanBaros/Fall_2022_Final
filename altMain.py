@@ -1,8 +1,8 @@
-from Map import *
-from Home import *
-from Rooms import *
-from Player import *
-from Monster import *
+from map import *
+from home import *
+from rooms import *
+from player import *
+from monster import *
 
 import pygame
 

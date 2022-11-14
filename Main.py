@@ -1,9 +1,10 @@
-from Map import *
-from Home import *
-from Rooms import *
-from Player import *
-from Monster import *
-from startup import *
+"""from map import *
+from home import *
+from rooms import *
+from player import *
+from monster import *
+from startup import *"""
+from level import *
 
 import pygame
 
@@ -11,9 +12,14 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        self.screenSize = screen.get_size()
+        self.screenSize = self.screen.get_size()
         self.clock = pygame.time.Clock()
-        self.Runninf = True
+        self.SCREENX = self.screenSize[0]
+        self.SCREENY = self.screenSize[1]
+        self.YTC = 10
+        self.XTC = 15
+        self.level = Level()
+        self.Running = True
 
     def run(self):
         while self.Running:
@@ -26,4 +32,5 @@ class Game:
                 self.Running = False
 
             time = self.clock.tick() / 1000
+            self.level.run()
             pygame.display.update()

@@ -1,21 +1,21 @@
 import random
 import pygame
-from Map import *
-from Rooms import *
-from Player import *
+from map import *
+from rooms import *
+from player import *
+from settings import *
 
 
 pygame.init()
 pygame.display.set_caption("Game")
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-screenX, screenY = screen.get_size()
 
 YTC = 10
 XTC = 15
 
-roomList: list[room] = []
+roomList: list[Room] = []
 
-grid = makeGrid(screenX, screenY, screen, XTC, YTC)
+grid = makeGrid(screen, XTC, YTC)
 
 ranX = random.randint(0, XTC - 1)
 ranY = random.randint(0, YTC - 1)
@@ -40,9 +40,9 @@ for i in range(YTC):
     roomList.append([])
     for j in range(XTC):
         roomList[i].append(
-            room(
+            Room(
                 grid[i][j].tile,
-                (screenX, screenY),
+                (SCREENX, SCREENY),
                 screen,
                 (Player.rect.width, Player.rect.height),
             )

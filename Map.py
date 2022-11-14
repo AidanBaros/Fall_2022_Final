@@ -2,6 +2,7 @@ import pygame
 import random
 import copy
 import numpy as np
+from settings import *
 
 pygame.init()
 
@@ -146,15 +147,15 @@ def Weights(possibilities):
         return 0
 
 
-def makeGrid(screenX, screenY, screen, XTC, YTC) -> list[Space]:
+def makeGrid(screen, XTC, YTC) -> list[Space]:
     global done
     global grid
     done = False
     grid = []
     XTC = XTC
     YTC = YTC
-    sizeY = screenY // YTC
-    offset = (screenX - (sizeY * XTC)) // 2
+    sizeY = SCREENY // YTC
+    offset = (SCREENX - (sizeY * XTC)) // 2
     sizeX = sizeY
     for i in range(YTC):
         grid.append([])
@@ -167,7 +168,7 @@ def makeGrid(screenX, screenY, screen, XTC, YTC) -> list[Space]:
     return grid
 
 
-def start(screenY, XTC, YTC):
+def start(XTC, YTC):
     for i in range(YTC):
         for j in range(XTC):
             grid[i][j].draw()
