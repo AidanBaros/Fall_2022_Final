@@ -2,7 +2,6 @@ import pygame
 import random
 import copy
 import numpy as np
-from settings import *
 
 pygame.init()
 
@@ -37,7 +36,7 @@ TileImages = [
 
 
 class Space:
-    def __init__(self, xpos, ypos, Yscale, screen):
+    def __init__(self, xpos: int, ypos: int, Yscale:int, screen: pygame.Surface):
         self.collapsed = False
         self.possibilities = copy.copy(TileImages)
         self.pos = (xpos, ypos)
@@ -128,7 +127,7 @@ def collapse():
         return
 
 
-def Weights(possibilities):
+def Weights(possibilities:list[Tile]):
     Weights = []
     GeneratorNum = 0
     Counter = 0
@@ -147,19 +146,17 @@ def Weights(possibilities):
         return 0
 
 
-def makeGrid(screen, XTC, YTC) -> list[Space]:
+def makeGrid(screen:pygame.Surface, tileGenRect:tuple[int,int], screenSize:tuple[int,int]) -> list[Space]:
     global done
     global grid
     done = False
     grid = []
-    XTC = XTC
-    YTC = YTC
-    sizeY = SCREENY // YTC
-    offset = (SCREENX - (sizeY * XTC)) // 2
+    sizeY = screenSize[1] // tileGenRect[1]
+    offset = (screenSize[0] - (sizeY * tileGenRect[0])) // 2
     sizeX = sizeY
-    for i in range(YTC):
+    for i in range(tileGenRect[1]):
         grid.append([])
-        for j in range(XTC):
+        for j in range(tileGenRect[0]):
             grid[i].append(Space((j * sizeX) + offset, i * sizeY, sizeY, screen))
 
     while not done:
@@ -168,7 +165,7 @@ def makeGrid(screen, XTC, YTC) -> list[Space]:
     return grid
 
 
-def start(XTC, YTC):
-    for i in range(YTC):
-        for j in range(XTC):
+def start(tileGenRect: tuple[int, int]):
+    for i in range(tileGenRect[1]):
+        for j in range(tileGenRect[0]):
             grid[i][j].draw()
