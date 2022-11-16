@@ -36,7 +36,7 @@ TileImages = [
 
 
 class Space:
-    def __init__(self, xpos: int, ypos: int, Yscale:int, screen: pygame.Surface):
+    def __init__(self, xpos: int, ypos: int, Yscale: int, screen: pygame.Surface):
         self.collapsed = False
         self.possibilities = copy.copy(TileImages)
         self.pos = (xpos, ypos)
@@ -127,7 +127,7 @@ def collapse():
         return
 
 
-def Weights(possibilities:list[Tile]):
+def Weights(possibilities: list[Tile]):
     Weights = []
     GeneratorNum = 0
     Counter = 0
@@ -146,7 +146,9 @@ def Weights(possibilities:list[Tile]):
         return 0
 
 
-def makeGrid(screen:pygame.Surface, tileGenRect:tuple[int,int], screenSize:tuple[int,int]) -> list[Space]:
+def makeGrid(
+    screen: pygame.Surface, tileGenRect: tuple[int, int], screenSize: tuple[int, int]
+) -> list[Space]:
     global done
     global grid
     done = False
