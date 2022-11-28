@@ -52,9 +52,11 @@ class Level:
                     )
                 )
 
+        self.player.getCollisionBoxList(self.roomList)
+
     def run(self, time: float):
         self.screen.fill("black")
-        self.roomList[self.playerMapPos[1]][self.playerMapPos[0]].update(
+        self.collisionBoxList: list[pygame.Rect] = self.roomList[self.playerMapPos[1]][self.playerMapPos[0]].update(
             self.player.rect
         )
         self.player.update(time, self.roomList)

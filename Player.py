@@ -12,6 +12,7 @@ class Player:
         self.frame_index = 0
         self.screen = screen
         self.playerMapPos = playerMapPos
+        self.returnVal = False
 
         self.screenSize = screenSize
 
@@ -20,10 +21,16 @@ class Player:
         self.rect = pygame.Rect(
             self.screenSize[0] // 2 - 25, self.screenSize[1] // 2 - 50, 50, 100
         )
+        self.hitbox = self.rect.copy()
+
+        self.collisionBoxList: list[list[pygame.Rect]] = []
 
         self.direction = pygame.math.Vector2()
         self.pos = pygame.math.Vector2(self.rect.center)
         self.speed = 700
+
+    def getCollisionBoxList(self, collisionBoxList):
+        self.collisionBoxList = collisionBoxList
 
     def input(self, roomList: list[list[Room]]):
         keys = pygame.key.get_pressed()
@@ -70,16 +77,29 @@ class Player:
         else:
             self.direction.x = 0
 
+    def collision(self, direction):
+        for boxes in self.collisionBoxList:
+            if boxes.colliderect(self.hitbox):
+                print("collide")
+                if direction == "horizontal":
+                    if self.direction.x > 0:
+                        self.hitbox.right = boxes.left
+                    if self.direction.x < 0:
+                        self.hitbox.left = boxes.right
+                    self.rect.centerx = self.hitbox.centerx
+                    self.pos.x = self.hitbox.centerx
+
+                if direction == "vertical":
+                    if self.direction.y > 0:
+                        self.hitbox.bottom = boxes.top
+                    if self.direction.y < 0:
+                        self.hitbox.top = boxes.bottom
+                    self.rect.centery = self.hitbox.centery
+                    self.pos.y = self.hitbox.centery
+        
+
     def move(self, time: float, roomList: list[list[Room]]):
-        if self.direction.magnitude() > 0:
-            self.direction = self.direction.normalize()
-        self.pos.x += self.direction.x * self.speed * time
-        self.rect.centerx = self.pos.x
-
-        self.pos.y += self.direction.y * self.speed * time
-        self.rect.centery = self.pos.y
-
-        if self.switchSide == 0:
+        """if self.switchSide == 0:
             self.playerMapPos[1] -= 1
             self.pos.x = self.screenSize[0] // 2 - self.rect.width // 2
             self.pos.y = self.screenSize[1] - self.rect.h - 10
@@ -95,12 +115,30 @@ class Player:
             self.playerMapPos[0] -= 1
             self.pos.x = self.screenSize[0] - self.rect.w - 10
             self.pos.y = self.screenSize[1] // 2 - self.rect.height // 2
-        self.switchSide = None
+        self.switchSide = None"""
 
-        returnVal, tempX, tempY = roomList[self.playerMapPos[1]][self.playerMapPos[0]].collision(self.rect)
-        if returnVal:
+        """self.returnVal, tempX, tempY = roomList[self.playerMapPos[1]][self.playerMapPos[0]].collision(self.rect)
+        if self.returnVal:
             self.pos.x = tempX
-            self.pos.y = tempY
+            self.pos.y = tempY"""
+
+        
+
+        if self.direction.magnitude() > 0:
+            self.direction = self.direction.normalize()
+
+        self.pos.x += self.direction.x * self.speed * time
+        self.hitbox.centerx = round(self.pos.x)
+        self.rect.centerx = self.hitbox.centerx
+        self.collision("horizontal")
+
+        self.pos.y += self.direction.y * self.speed * time
+        self.hitbox.centery = round(self.pos.y)
+        self.rect.centery = self.hitbox.centery
+        self.collision("vertical")
+
+        
+        
 
     def draw(self):
         pygame.draw.rect(self.screen, (255, 0, 0), self.rect)
