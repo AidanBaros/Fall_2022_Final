@@ -299,7 +299,7 @@ class Room:
             0, self.HeightNoHallway, self.WidthNoHallway, self.hallwaySize
         )
 
-    def draw(self): 
+    def draw(self):
         self.screen.fill((0, 0, 0))
         """for i in range(len(self.collisionBoxList)):
             pygame.draw.rect(
@@ -347,27 +347,6 @@ class Room:
                 self.main_room,
             )
 
-    """def collision(self, player: pygame.Rect):
-        returnVal = False
-        for i in self.collisionBoxList:
-            if player.colliderect(i):
-                if player.top < i.bottom and (player.top + 1 >= i.bottom):
-                    print(player.centery)
-                    player.top = i.bottom
-                    print(f"colliding 1 {player.centery}")
-                elif player.left < i.right and (player.left + 1 >= i.right):
-                    player.left = i.right
-                    print("colliding 2")
-                elif player.bottom > i.top and (player.bottom - 1 <= i.top):
-                    player.bottom = i.top
-                    print("colliding 3")
-                elif player.right > i.left and (player.right - 1 <= i.left):
-                    player.right = i.left
-                    print("colliding 4")
-                returnVal = True
-        return returnVal, player.centerx, player.centery"""
-
-    def update(self, player: pygame.Rect):
+    def update(self):
         self.draw()
-        #self.collision(player)
         return self.collisionBoxList

@@ -21,12 +21,12 @@ class Game:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LCTRL]:
                 self.Running = False
-            if keys[pygame.K_LSHIFT]:
-                while True:
-                    self.screen.fill((0, 0, 0))
-                    start(self.tileGenRect)
-                    if keys[pygame.K_LSHIFT]:
-                        break
+            while keys[pygame.K_LSHIFT]:
+                pygame.event.get()
+                keys = pygame.key.get_pressed()
+                self.screen.fill((0, 0, 0))
+                start(self.tileGenRect, self.level.playerMapPos)
+                pygame.display.flip()
 
             time = self.clock.tick() / 1000
             self.level.run(time)

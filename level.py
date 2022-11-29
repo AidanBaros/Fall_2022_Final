@@ -16,13 +16,17 @@ class Level:
 
         self.roomList: list[list[Room]] = []
 
+        self.collisionBoxList: list[pygame.Rect] = []
+
         self.playerMapPos = ()
 
         self.setup()
 
     def setup(self):
-        grid:list[list[Space]] = makeGrid(self.screen, self.tileGenRect, self.screenSize)
 
+        grid: list[list[Space]] = makeGrid(
+            self.screen, self.tileGenRect, self.screenSize
+        )
         ranX = random.randint(0, self.tileGenRect[0] - 1)
         ranY = random.randint(0, self.tileGenRect[1] - 1)
         while True:
@@ -38,6 +42,8 @@ class Level:
 
         self.playerMapPos = [ranX, ranY]
 
+        
+
         self.player = Player(self.screen, self.playerMapPos, self.screenSize)
 
         for i in range(self.tileGenRect[1]):
@@ -52,11 +58,10 @@ class Level:
                     )
                 )
 
-        self.player.getCollisionBoxList(self.roomList)
-
     def run(self, time: float):
         self.screen.fill("black")
-        self.collisionBoxList: list[pygame.Rect] = self.roomList[self.playerMapPos[1]][self.playerMapPos[0]].update(
-            self.player.rect
-        )
+        self.collisionBoxList: list[pygame.Rect] = self.roomList[self.playerMapPos[1]][
+            self.playerMapPos[0]
+        ].update()
+        self.player.getCollisionBoxList(self.collisionBoxList)
         self.player.update(time, self.roomList)

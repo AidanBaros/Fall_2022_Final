@@ -9,6 +9,7 @@ pygame.init()
 class Tile:
     def __init__(self, fileName: str, sideValues: list, ID, Weight):
         self.image = pygame.image.load("HalfTiles/" + fileName)
+        self.image = self.image.copy()
         self.sides = sideValues
         self.name = fileName
         self.ID = ID
@@ -36,20 +37,26 @@ TileImages = [
 
 
 class Space:
-    def __init__(self, xpos: int, ypos: int, Yscale: int, screen: pygame.Surface):
+    def __init__(self, xpos: int, ypos: int, Yscale: int):
         self.collapsed = False
         self.possibilities = copy.copy(TileImages)
         self.pos = (xpos, ypos)
         self.entropy = len(TileImages)
         self.tile: Tile
         self.Yscale = Yscale
-        self.screen = screen
+        self.screen = pygame.display.get_surface()
+        #self.PlayerMapPos = PlayerMapPos
 
-    def draw(self):
+    def draw(self,i,j,PlayerMapPos: tuple[int,int]):
         if self.collapsed:
+            pygame.draw.rect(self.screen,(255,0,0),(self.pos[0],self.pos[1],self.Yscale,self.Yscale))
             self.tile.image = pygame.transform.scale(
                 self.tile.image, (self.Yscale, self.Yscale)
             )
+            if j == PlayerMapPos[0] and i == PlayerMapPos[1]:
+                self.tile.image.set_colorkey((255,255,255))
+            else:
+                self.tile.image.set_colorkey(None)
             self.screen.blit(self.tile.image, self.pos)
 
     def collapse(self):
@@ -159,7 +166,7 @@ def makeGrid(
     for i in range(tileGenRect[1]):
         grid.append([])
         for j in range(tileGenRect[0]):
-            grid[i].append(Space((j * sizeX) + offset, i * sizeY, sizeY, screen))
+            grid[i].append(Space((j * sizeX) + offset, i * sizeY, sizeY))
 
     while not done:
         done = determine_possibilities()
@@ -167,7 +174,7 @@ def makeGrid(
     return grid
 
 
-def start(tileGenRect: tuple[int, int]):
+def start(tileGenRect: tuple[int, int],PlayerMapPos: tuple[int, int]):
     for i in range(tileGenRect[1]):
         for j in range(tileGenRect[0]):
-            grid[i][j].draw()
+            grid[i][j].draw(i,j,PlayerMapPos)
