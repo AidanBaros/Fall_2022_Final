@@ -14,6 +14,7 @@ class Tile:
         self.name = fileName
         self.ID = ID
         self.Weight = Weight
+        self.checked = False
 
 
 TileImages = [
