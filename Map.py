@@ -45,16 +45,20 @@ class Space:
         self.tile: Tile
         self.Yscale = Yscale
         self.screen = pygame.display.get_surface()
-        #self.PlayerMapPos = PlayerMapPos
+        # self.PlayerMapPos = PlayerMapPos
 
-    def draw(self,i,j,PlayerMapPos: tuple[int,int]):
+    def draw(self, i, j, PlayerMapPos: tuple[int, int]):
         if self.collapsed:
-            pygame.draw.rect(self.screen,(255,0,0),(self.pos[0],self.pos[1],self.Yscale,self.Yscale))
+            pygame.draw.rect(
+                self.screen,
+                (255, 0, 0),
+                (self.pos[0], self.pos[1], self.Yscale, self.Yscale),
+            )
             self.tile.image = pygame.transform.scale(
                 self.tile.image, (self.Yscale, self.Yscale)
             )
             if j == PlayerMapPos[0] and i == PlayerMapPos[1]:
-                self.tile.image.set_colorkey((255,255,255))
+                self.tile.image.set_colorkey((255, 255, 255))
             else:
                 self.tile.image.set_colorkey(None)
             self.screen.blit(self.tile.image, self.pos)
@@ -174,7 +178,7 @@ def makeGrid(
     return grid
 
 
-def start(tileGenRect: tuple[int, int],PlayerMapPos: tuple[int, int]):
+def start(tileGenRect: tuple[int, int], PlayerMapPos: tuple[int, int]):
     for i in range(tileGenRect[1]):
         for j in range(tileGenRect[0]):
-            grid[i][j].draw(i,j,PlayerMapPos)
+            grid[i][j].draw(i, j, PlayerMapPos)

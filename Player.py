@@ -27,6 +27,8 @@ class Player:
         self.pos = pygame.math.Vector2(self.rect.center)
         self.speed = 700
 
+        self.screenTransition = False
+
     def getCollisionBoxList(self, collisionBoxList):
         self.collisionBoxList = collisionBoxList
 
@@ -55,22 +57,18 @@ class Player:
         for box in self.collisionBoxList:
             if box.colliderect(self.hitbox):
                 if direction == "horizontal":
-                    if self.direction.x > 0:
+                    if self.direction.x > 0 and not self.screenTransition:
                         self.hitbox.right = box.left
-                        print("test1")
-                    if self.direction.x < 0:
+                    if self.direction.x < 0 and not self.screenTransition:
                         self.hitbox.left = box.right
-                        print("test2")
                     self.rect.centerx = self.hitbox.centerx
                     self.pos.x = self.hitbox.centerx
 
                 if direction == "vertical":
-                    if self.direction.y > 0:
+                    if self.direction.y > 0 and not self.screenTransition:
                         self.hitbox.bottom = box.top
-                        print("test3")
-                    if self.direction.y < 0:
+                    if self.direction.y < 0 and not self.screenTransition:
                         self.hitbox.top = box.bottom
-                        print("test4")
                     self.rect.centery = self.hitbox.centery
                     self.pos.y = self.hitbox.centery
 
@@ -81,8 +79,9 @@ class Player:
             == 1
         ):
             self.playerMapPos[0] -= 1
-            self.pos.x = self.screenSize[0] -  100
+            self.pos.x = self.screenSize[0] - 100
             self.pos.y = self.screenSize[1] // 2
+            self.screenTransition = True
 
         if (
             self.hitbox.right >= self.screenSize[0]
@@ -92,6 +91,7 @@ class Player:
             self.playerMapPos[0] += 1
             self.pos.x = 100
             self.pos.y = self.screenSize[1] // 2
+            self.screenTransition = True
 
         if (
             self.hitbox.top <= 0
@@ -101,6 +101,7 @@ class Player:
             self.playerMapPos[1] -= 1
             self.pos.x = self.screenSize[0] // 2
             self.pos.y = self.screenSize[1] - 100
+            self.screenTransition = True
 
         if (
             self.hitbox.bottom >= self.screenSize[1]
@@ -110,6 +111,7 @@ class Player:
             self.playerMapPos[1] += 1
             self.pos.x = self.screenSize[0] // 2
             self.pos.y = 100
+            self.screenTransition = True
 
         if self.direction.magnitude() > 0:
             self.direction = self.direction.normalize()
@@ -123,6 +125,8 @@ class Player:
         self.hitbox.centery = round(self.pos.y)
         self.rect.centery = self.hitbox.centery
         self.collision("vertical")
+
+        self.screenTransition = False
 
     def draw(self):
         pygame.draw.rect(self.screen, (255, 0, 0), self.rect)

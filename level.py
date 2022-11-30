@@ -42,8 +42,6 @@ class Level:
 
         self.playerMapPos = [ranX, ranY]
 
-        
-
         self.player = Player(self.screen, self.playerMapPos, self.screenSize)
 
         for i in range(self.tileGenRect[1]):
