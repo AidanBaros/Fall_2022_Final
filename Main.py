@@ -21,6 +21,8 @@ class Game:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LCTRL]:
                 self.Running = False
+            if keys[pygame.K_SPACE]:
+                self.level = Level(self.screenSize, self.tileGenRect)
             while keys[pygame.K_LSHIFT]:
                 pygame.event.get()
                 keys = pygame.key.get_pressed()

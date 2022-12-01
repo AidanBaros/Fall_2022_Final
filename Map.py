@@ -46,7 +46,6 @@ class Space:
         self.tile: Tile
         self.Yscale = Yscale
         self.screen = pygame.display.get_surface()
-        # self.PlayerMapPos = PlayerMapPos
 
     def draw(self, i, j, PlayerMapPos: tuple[int, int]):
         if self.collapsed:

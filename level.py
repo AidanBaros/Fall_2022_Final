@@ -1,5 +1,6 @@
 import pygame
 import numpy
+import time
 from map import *
 from home import *
 from rooms import Room
@@ -21,10 +22,13 @@ class Level:
 
         self.playerMapPos = ()
 
+        self.number = 0
+
+        self.checkList = []
+
         self.setup()
 
     def setup(self):
-
         grid: list[list[Space]] = makeGrid(
             self.screen, self.tileGenRect, self.screenSize
         )
@@ -44,19 +48,9 @@ class Level:
         self.playerMapPos = [ranX, ranY]
 
         self.CheckForIslands(self.playerMapPos, grid)
+        pygame.display.flip()
 
-        for Z in range(self.tileGenRect[1]):
-            for V in range(self.tileGenRect[0]):
-                print(f"{grid[Z][V].tile.ID}, {grid[Z][V].tile.checked} | ", end="")
-            print()
-
-
-
-        """if not grid[Z][V].tile.checked and grid[Z][V].tile.ID != 0:
-                    print("Goodbye islands")
-                    #self.setup()
-                    #return
-        print("No islands")"""
+        self.checkReGen(grid)
 
         self.player = Player(self.screen, self.playerMapPos, self.screenSize)
 
@@ -72,7 +66,25 @@ class Level:
                     )
                 )
 
-    def CheckForIslands(self, Pos: tuple[int, int], grid: list[list[Space]]):
+    def checkReGen(self, grid):
+        for Z in range(self.tileGenRect[1]):
+            for V in range(self.tileGenRect[0]):
+                if grid[Z][V] not in self.checkList and grid[Z][V].tile.ID != 0:
+                    # print("test")
+                    self.setup()
+                    return
+                """test = "F"
+                if grid[Z][V].tile.checked:
+                    test = "T"
+                if grid[Z][V].tile.ID < 10:
+                    print(f"0{grid[Z][V].tile.ID}, {test} | ", end="")
+                else:
+                    print(f"{grid[Z][V].tile.ID}, {test} | ", end="")
+            print()"""
+
+    def CheckForIslands(
+        self, Pos: tuple[int, int], grid: list[list[Space]], lastTile=None
+    ):
         x = Pos[0]
         left = Pos[0] - 1
         right = Pos[0] + 1
@@ -81,18 +93,21 @@ class Level:
         down = Pos[1] + 1
 
         grid[y][x].tile.checked = True
+        self.checkList.append(grid[y][x])
 
-        if grid[y][x].tile.sides[0] == 1 and not grid[up][x].tile.checked:
-            self.CheckForIslands((x, up), grid)
+        currentRect = grid[y][x].tile.image.get_rect()
 
-        if grid[y][x].tile.sides[2] == 1 and not grid[down][x].tile.checked:
-            self.CheckForIslands((x, down), grid)
+        if grid[y][x].tile.sides[0] == 1 and grid[up][x] not in self.checkList:
+            self.CheckForIslands((x, up), grid, currentRect.center)
 
-        if grid[y][x].tile.sides[1] == 1 and not grid[y][right].tile.checked:
-            self.CheckForIslands((right, y), grid)
+        if grid[y][x].tile.sides[2] == 1 and grid[down][x] not in self.checkList:
+            self.CheckForIslands((x, down), grid, currentRect.center)
 
-        if grid[y][x].tile.sides[3] == 1 and not grid[y][left].tile.checked:
-            self.CheckForIslands((left, y), grid)
+        if grid[y][x].tile.sides[1] == 1 and grid[y][right] not in self.checkList:
+            self.CheckForIslands((right, y), grid, currentRect.center)
+
+        if grid[y][x].tile.sides[3] == 1 and grid[y][left] not in self.checkList:
+            self.CheckForIslands((left, y), grid, currentRect.center)
 
     def run(self, time: float):
         self.screen.fill("black")
