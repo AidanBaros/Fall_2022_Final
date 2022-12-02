@@ -12,7 +12,6 @@ class Player:
         self.frame_index = 0
         self.screen = screen
         self.playerMapPos = playerMapPos
-        self.returnVal = False
 
         self.screenSize = screenSize
 
@@ -28,6 +27,8 @@ class Player:
         self.speed = 700
 
         self.screenTransition = False
+
+        self.health = 50
 
     def getCollisionBoxList(self, collisionBoxList):
         self.collisionBoxList = collisionBoxList
