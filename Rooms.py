@@ -1,6 +1,7 @@
 import pygame
 import random
 from map import Tile
+import monster
 
 pygame.init()
 
@@ -12,13 +13,16 @@ class Room:
         screenSize: tuple[int, int],
         screen: pygame.Surface,
         playerSize: tuple[int, int],
+        playerMapPos: list[int, int],
     ):
         self.hallwayDirection = tile.sides
         self.ID = tile.ID
         self.screenX = screenSize[0]
         self.screenY = screenSize[1]
+        self.screenSize = screenSize
         self.screen = screen
         self.playerSize = playerSize
+        self.playerMapPos = playerMapPos
         self.collisionBoxList: list[pygame.Rect] = []
         self.RoomYes = [1, 2, 3, 4, 11, 12, 13, 14, 15]
         self.RoomNo = [5, 6, 7, 8, 9, 10]
@@ -31,10 +35,14 @@ class Room:
         self.offset = 0
         self.color = (255, 255, 255)
 
+        monsterSpawnArea:list[tuple[int,int]] = []
+
         self.w = False
         self.s = False
         self.a = False
         self.d = False
+
+        self.monsterList = []
 
         # SET OFFSET
         if self.ID == 1:
@@ -180,92 +188,35 @@ class Room:
         )
 
         if self.ID == 1:
-            self.collisionBoxList.append(self.TLT)
-            self.collisionBoxList.append(self.TLL)
-            self.collisionBoxList.append(self.TRT)
-            self.collisionBoxList.append(self.TRR)
-            self.collisionBoxList.append(self.BLL)
-            self.collisionBoxList.append(self.BRR)
-            self.collisionBoxList.append(self.BottomR)
+            self.tile1()
         elif self.ID == 2:
-            self.collisionBoxList.append(self.BRR)
-            self.collisionBoxList.append(self.BRB)
-            self.collisionBoxList.append(self.TRT)
-            self.collisionBoxList.append(self.TRR)
-            self.collisionBoxList.append(self.BLB)
-            self.collisionBoxList.append(self.TLT)
-            self.collisionBoxList.append(self.LeftR)
+            self.tile2()
         elif self.ID == 3:
-            self.collisionBoxList.append(self.BLL)
-            self.collisionBoxList.append(self.BLB)
-            self.collisionBoxList.append(self.BRR)
-            self.collisionBoxList.append(self.BRB)
-            self.collisionBoxList.append(self.TLL)
-            self.collisionBoxList.append(self.TRR)
-            self.collisionBoxList.append(self.TopR)
+            self.tile3()
         elif self.ID == 4:
-            self.collisionBoxList.append(self.TLT)
-            self.collisionBoxList.append(self.TLL)
-            self.collisionBoxList.append(self.BLL)
-            self.collisionBoxList.append(self.BLB)
-            self.collisionBoxList.append(self.TRT)
-            self.collisionBoxList.append(self.BRB)
-            self.collisionBoxList.append(self.RightR)
+            self.tile4()
         elif self.ID == 5:
-            self.collisionBoxList.append(self.TopNR)
-            self.collisionBoxList.append(self.BottomNR)
+            self.tile5()
         elif self.ID == 6:
-            self.collisionBoxList.append(self.LeftNR)
-            self.collisionBoxList.append(self.RightNR)
+            self.tile6()
         elif self.ID == 7:
-            self.collisionBoxList.append(self.CornerTR)
-            self.collisionBoxList.append(self.BottomNR)
-            self.collisionBoxList.append(self.LeftNR)
+            self.tile7()
         elif self.ID == 8:
-            self.collisionBoxList.append(self.CornerBR)
-            self.collisionBoxList.append(self.TopNR)
-            self.collisionBoxList.append(self.LeftNR)
+            self.tile8()
         elif self.ID == 9:
-            self.collisionBoxList.append(self.CornerBL)
-            self.collisionBoxList.append(self.TopNR)
-            self.collisionBoxList.append(self.RightNR)
+            self.tile9()
         elif self.ID == 10:
-            self.collisionBoxList.append(self.CornerTL)
-            self.collisionBoxList.append(self.BottomNR)
-            self.collisionBoxList.append(self.RightNR)
+            self.tile10()
         elif self.ID == 11:
-            self.collisionBoxList.append(self.TLT)
-            self.collisionBoxList.append(self.TRT)
-            self.collisionBoxList.append(self.RightR)
-            self.collisionBoxList.append(self.LeftR)
-            self.collisionBoxList.append(self.BottomR)
+            self.tile11()
         elif self.ID == 12:
-            self.collisionBoxList.append(self.BRR)
-            self.collisionBoxList.append(self.TRR)
-            self.collisionBoxList.append(self.LeftR)
-            self.collisionBoxList.append(self.BottomR)
-            self.collisionBoxList.append(self.TopR)
+            self.tile12()
         elif self.ID == 13:
-            self.collisionBoxList.append(self.BRB)
-            self.collisionBoxList.append(self.BLB)
-            self.collisionBoxList.append(self.RightR)
-            self.collisionBoxList.append(self.LeftR)
-            self.collisionBoxList.append(self.TopR)
+            self.tile13()
         elif self.ID == 14:
-            self.collisionBoxList.append(self.TLL)
-            self.collisionBoxList.append(self.BLL)
-            self.collisionBoxList.append(self.RightR)
-            self.collisionBoxList.append(self.BottomR)
-            self.collisionBoxList.append(self.TopR)
+            self.tile14()
         elif self.ID == 15:
-            self.collisionBoxList.append(self.TLT)
-            self.collisionBoxList.append(self.TLL)
-            self.collisionBoxList.append(self.BRR)
-            self.collisionBoxList.append(self.BRB)
-            self.collisionBoxList.append(self.TRR)
-            self.collisionBoxList.append(self.TRT)
-            self.collisionBoxList.append(self.BLL)
-            self.collisionBoxList.append(self.BLB)
+            self.tile15()
 
         # Playable area rects
         self.center_square = pygame.Rect(
@@ -298,6 +249,125 @@ class Room:
         self.left_hallway = pygame.Rect(
             0, self.HeightNoHallway, self.WidthNoHallway, self.hallwaySize
         )
+
+        self.monsterGen(screen, playerMapPos, screenSize)
+
+    def monsterGen(
+        self,
+        screen: pygame.Surface,
+        playerMapPos: list[int, int],
+        screenSize: tuple[int, int],
+    ):
+        monsterChance = random.randint(0, 15)
+        numMonsters = 0
+        if monsterChance <= 1:
+            numMonsters = random.randint(0, 5)
+            for _ in range(numMonsters):
+                self.monsterList.append(
+                    monster.Spider(self.screen, self.playerMapPos, self.screenSize)
+                )
+
+    def tile1(self):
+        self.collisionBoxList.append(self.TLT)
+        self.collisionBoxList.append(self.TLL)
+        self.collisionBoxList.append(self.TRT)
+        self.collisionBoxList.append(self.TRR)
+        self.collisionBoxList.append(self.BLL)
+        self.collisionBoxList.append(self.BRR)
+        self.collisionBoxList.append(self.BottomR)
+
+    def tile2(self):
+        self.collisionBoxList.append(self.BRR)
+        self.collisionBoxList.append(self.BRB)
+        self.collisionBoxList.append(self.TRT)
+        self.collisionBoxList.append(self.TRR)
+        self.collisionBoxList.append(self.BLB)
+        self.collisionBoxList.append(self.TLT)
+        self.collisionBoxList.append(self.LeftR)
+
+    def tile3(self):
+        self.collisionBoxList.append(self.BLL)
+        self.collisionBoxList.append(self.BLB)
+        self.collisionBoxList.append(self.BRR)
+        self.collisionBoxList.append(self.BRB)
+        self.collisionBoxList.append(self.TLL)
+        self.collisionBoxList.append(self.TRR)
+        self.collisionBoxList.append(self.TopR)
+
+    def tile4(self):
+        self.collisionBoxList.append(self.TLT)
+        self.collisionBoxList.append(self.TLL)
+        self.collisionBoxList.append(self.BLL)
+        self.collisionBoxList.append(self.BLB)
+        self.collisionBoxList.append(self.TRT)
+        self.collisionBoxList.append(self.BRB)
+        self.collisionBoxList.append(self.RightR)
+
+    def tile5(self):
+        self.collisionBoxList.append(self.TopNR)
+        self.collisionBoxList.append(self.BottomNR)
+
+    def tile6(self):
+        self.collisionBoxList.append(self.LeftNR)
+        self.collisionBoxList.append(self.RightNR)
+
+    def tile7(self):
+        self.collisionBoxList.append(self.CornerTR)
+        self.collisionBoxList.append(self.BottomNR)
+        self.collisionBoxList.append(self.LeftNR)
+
+    def tile8(self):
+        self.collisionBoxList.append(self.CornerBR)
+        self.collisionBoxList.append(self.TopNR)
+        self.collisionBoxList.append(self.LeftNR)
+
+    def tile9(self):
+        self.collisionBoxList.append(self.CornerBL)
+        self.collisionBoxList.append(self.TopNR)
+        self.collisionBoxList.append(self.RightNR)
+
+    def tile10(self):
+        self.collisionBoxList.append(self.CornerTL)
+        self.collisionBoxList.append(self.BottomNR)
+        self.collisionBoxList.append(self.RightNR)
+
+    def tile11(self):
+        self.collisionBoxList.append(self.TLT)
+        self.collisionBoxList.append(self.TRT)
+        self.collisionBoxList.append(self.RightR)
+        self.collisionBoxList.append(self.LeftR)
+        self.collisionBoxList.append(self.BottomR)
+
+    def tile12(self):
+        self.collisionBoxList.append(self.BRR)
+        self.collisionBoxList.append(self.TRR)
+        self.collisionBoxList.append(self.LeftR)
+        self.collisionBoxList.append(self.BottomR)
+        self.collisionBoxList.append(self.TopR)
+
+    def tile13(self):
+        self.collisionBoxList.append(self.BRB)
+        self.collisionBoxList.append(self.BLB)
+        self.collisionBoxList.append(self.RightR)
+        self.collisionBoxList.append(self.LeftR)
+        self.collisionBoxList.append(self.TopR)
+
+    def tile14(self):
+        self.collisionBoxList.append(self.TLL)
+        self.collisionBoxList.append(self.BLL)
+        self.collisionBoxList.append(self.RightR)
+        self.collisionBoxList.append(self.BottomR)
+        self.collisionBoxList.append(self.TopR)
+
+    def tile15(self):
+        self.collisionBoxList.append(self.TLT)
+        self.collisionBoxList.append(self.TLL)
+        self.collisionBoxList.append(self.BRR)
+        self.collisionBoxList.append(self.BRB)
+        self.collisionBoxList.append(self.TRR)
+        self.collisionBoxList.append(self.TRT)
+        self.collisionBoxList.append(self.BLL)
+        self.collisionBoxList.append(self.BLB)
 
     def draw(self):
         self.screen.fill((0, 0, 0))
