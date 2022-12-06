@@ -32,4 +32,4 @@ class Game:
 
             time = self.clock.tick() / 1000
             self.level.run(time)
-            pygame.display.update()
+            pygame.display.flip()

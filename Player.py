@@ -12,6 +12,7 @@ class Player:
         self.frame_index = 0
         self.screen = screen
         self.playerMapPos = playerMapPos
+        self.returnVal = False
 
         self.screenSize = screenSize
 

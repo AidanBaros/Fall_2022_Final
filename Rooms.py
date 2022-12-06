@@ -35,14 +35,14 @@ class Room:
         self.offset = 0
         self.color = (255, 255, 255)
 
-        monsterSpawnArea:list[tuple[int,int]] = []
+        self.monsterSpawnArea: list[pygame.Rect] = []
 
         self.w = False
         self.s = False
         self.a = False
         self.d = False
 
-        self.monsterList = []
+        self.monsterList: list[monster.Monster] = []
 
         # SET OFFSET
         if self.ID == 1:
@@ -250,21 +250,53 @@ class Room:
             0, self.HeightNoHallway, self.WidthNoHallway, self.hallwaySize
         )
 
-        self.monsterGen(screen, playerMapPos, screenSize)
+        if self.ID not in (5, 6, 7, 8, 9, 10):
+            self.monsterSpawnArea.append(self.main_room)
 
-    def monsterGen(
-        self,
-        screen: pygame.Surface,
-        playerMapPos: list[int, int],
-        screenSize: tuple[int, int],
-    ):
+        else:
+            self.monsterSpawnArea.append(self.center_square)
+            if self.hallwayDirection[0] == 1:
+                self.monsterSpawnArea.append(self.top_hallway)
+            if self.hallwayDirection[1] == 1:
+                self.monsterSpawnArea.append(self.right_hallway)
+            if self.hallwayDirection[2] == 1:
+                self.monsterSpawnArea.append(self.bottom_hallway)
+            if self.hallwayDirection[3] == 1:
+                self.monsterSpawnArea.append(self.left_hallway)
+
+        self.monsterGen()
+
+    def monsterGen(self):
         monsterChance = random.randint(0, 15)
         numMonsters = 0
         if monsterChance <= 1:
+            if len(self.monsterSpawnArea) > 1:
+                indexPos = random.randint(0, len(self.monsterSpawnArea)-1)
+            else:
+                indexPos = 0
             numMonsters = random.randint(0, 5)
             for _ in range(numMonsters):
+                spawnX = random.randint(
+                    self.monsterSpawnArea[indexPos].x,
+                    (
+                        self.monsterSpawnArea[indexPos].x
+                        + self.monsterSpawnArea[indexPos].width
+                    ),
+                )
+                spawnY = random.randint(
+                    self.monsterSpawnArea[indexPos].y,
+                    (
+                        self.monsterSpawnArea[indexPos].y
+                        + self.monsterSpawnArea[indexPos].height
+                    ),
+                )
                 self.monsterList.append(
-                    monster.Spider(self.screen, self.playerMapPos, self.screenSize)
+                    monster.Spider(
+                        self.screen,
+                        self.playerMapPos,
+                        self.screenSize,
+                        (spawnX, spawnY),
+                    )
                 )
 
     def tile1(self):
@@ -419,4 +451,7 @@ class Room:
 
     def update(self):
         self.draw()
+        for i in self.monsterList:
+            print(i.pos)
+            i.update()
         return self.collisionBoxList
