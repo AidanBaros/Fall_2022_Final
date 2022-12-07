@@ -269,12 +269,12 @@ class Room:
     def monsterGen(self):
         monsterChance = random.randint(0, 15)
         numMonsters = 0
-        if monsterChance <= 1:
+        if monsterChance <= 1:  # need to change this back at somepoint
             if len(self.monsterSpawnArea) > 1:
-                indexPos = random.randint(0, len(self.monsterSpawnArea)-1)
+                indexPos = random.randint(0, len(self.monsterSpawnArea) - 1)
             else:
                 indexPos = 0
-            numMonsters = random.randint(0, 5)
+            numMonsters = 1  # random.randint(0, 5)
             for _ in range(numMonsters):
                 spawnX = random.randint(
                     self.monsterSpawnArea[indexPos].x,
@@ -292,10 +292,126 @@ class Room:
                 )
                 self.monsterList.append(
                     monster.Spider(
-                        self.screen,
                         self.playerMapPos,
                         self.screenSize,
                         (spawnX, spawnY),
+                        self.collisionBoxList,
+                    )
+                )
+        if monsterChance <= 3:  # need to change this back at somepoint
+            if len(self.monsterSpawnArea) > 1:
+                indexPos = random.randint(0, len(self.monsterSpawnArea) - 1)
+            else:
+                indexPos = 0
+            numMonsters = random.randint(0, 3)
+            for _ in range(numMonsters):
+                spawnX = random.randint(
+                    self.monsterSpawnArea[indexPos].x,
+                    (
+                        self.monsterSpawnArea[indexPos].x
+                        + self.monsterSpawnArea[indexPos].width
+                    ),
+                )
+                spawnY = random.randint(
+                    self.monsterSpawnArea[indexPos].y,
+                    (
+                        self.monsterSpawnArea[indexPos].y
+                        + self.monsterSpawnArea[indexPos].height
+                    ),
+                )
+                self.monsterList.append(
+                    monster.Skeleton(
+                        self.playerMapPos,
+                        self.screenSize,
+                        (spawnX, spawnY),
+                        self.collisionBoxList,
+                    )
+                )
+        if monsterChance <= 5:  # need to change this back at somepoint
+            if len(self.monsterSpawnArea) > 1:
+                indexPos = random.randint(0, len(self.monsterSpawnArea) - 1)
+            else:
+                indexPos = 0
+            numMonsters = 1  # random.randint(0, 5)
+            for _ in range(numMonsters):
+                spawnX = random.randint(
+                    self.monsterSpawnArea[indexPos].x,
+                    (
+                        self.monsterSpawnArea[indexPos].x
+                        + self.monsterSpawnArea[indexPos].width
+                    ),
+                )
+                spawnY = random.randint(
+                    self.monsterSpawnArea[indexPos].y,
+                    (
+                        self.monsterSpawnArea[indexPos].y
+                        + self.monsterSpawnArea[indexPos].height
+                    ),
+                )
+                self.monsterList.append(
+                    monster.Spider(
+                        self.playerMapPos,
+                        self.screenSize,
+                        (spawnX, spawnY),
+                        self.collisionBoxList,
+                    )
+                )
+        if monsterChance <= 7:  # need to change this back at somepoint
+            if len(self.monsterSpawnArea) > 1:
+                indexPos = random.randint(0, len(self.monsterSpawnArea) - 1)
+            else:
+                indexPos = 0
+            numMonsters = 1  # random.randint(0, 5)
+            for _ in range(numMonsters):
+                spawnX = random.randint(
+                    self.monsterSpawnArea[indexPos].x,
+                    (
+                        self.monsterSpawnArea[indexPos].x
+                        + self.monsterSpawnArea[indexPos].width
+                    ),
+                )
+                spawnY = random.randint(
+                    self.monsterSpawnArea[indexPos].y,
+                    (
+                        self.monsterSpawnArea[indexPos].y
+                        + self.monsterSpawnArea[indexPos].height
+                    ),
+                )
+                self.monsterList.append(
+                    monster.Spider(
+                        self.playerMapPos,
+                        self.screenSize,
+                        (spawnX, spawnY),
+                        self.collisionBoxList,
+                    )
+                )
+        if monsterChance <= 9:  # need to change this back at somepoint
+            if len(self.monsterSpawnArea) > 1:
+                indexPos = random.randint(0, len(self.monsterSpawnArea) - 1)
+            else:
+                indexPos = 0
+            numMonsters = 1  # random.randint(0, 5)
+            for _ in range(numMonsters):
+                spawnX = random.randint(
+                    self.monsterSpawnArea[indexPos].x,
+                    (
+                        self.monsterSpawnArea[indexPos].x
+                        + self.monsterSpawnArea[indexPos].width
+                    ),
+                )
+                spawnY = random.randint(
+                    self.monsterSpawnArea[indexPos].y,
+                    (
+                        self.monsterSpawnArea[indexPos].y
+                        + self.monsterSpawnArea[indexPos].height
+                    ),
+                )
+                self.monsterList.append(
+                    monster.Spider(
+                        self.playerMapPos,
+                        self.screenSize,
+                        (spawnX, spawnY),
+                        self.collisionBoxList,
                     )
                 )
 
@@ -449,9 +565,8 @@ class Room:
                 self.main_room,
             )
 
-    def update(self):
+    def update(self, time):
         self.draw()
         for i in self.monsterList:
-            print(i.pos)
-            i.update()
+            i.update(time)
         return self.collisionBoxList
