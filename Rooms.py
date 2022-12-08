@@ -269,27 +269,38 @@ class Room:
     def monsterGen(self):
         monsterChance = random.randint(0, 15)
         numMonsters = 0
-        if monsterChance <= 1:  # need to change this back at somepoint
+        if monsterChance <= 1:
+            numMonsters = 1 #random.randint(1, 6)
+        elif monsterChance <= 3:
+            numMonsters = 1 #random.randint(1, 4)
+        elif monsterChance <= 5:
+            numMonsters = 1 #random.randint(1, 4)
+        elif monsterChance <= 7:
+            numMonsters = 1 #random.randint(1, 5)
+        elif monsterChance <= 9:
+            numMonsters = 1 #random.randint(5, 11)
+        for _ in range(numMonsters):
             if len(self.monsterSpawnArea) > 1:
                 indexPos = random.randint(0, len(self.monsterSpawnArea) - 1)
             else:
                 indexPos = 0
-            numMonsters = 1  # random.randint(0, 5)
-            for _ in range(numMonsters):
-                spawnX = random.randint(
-                    self.monsterSpawnArea[indexPos].x,
-                    (
-                        self.monsterSpawnArea[indexPos].x
-                        + self.monsterSpawnArea[indexPos].width
-                    ),
-                )
-                spawnY = random.randint(
-                    self.monsterSpawnArea[indexPos].y,
-                    (
-                        self.monsterSpawnArea[indexPos].y
-                        + self.monsterSpawnArea[indexPos].height
-                    ),
-                )
+            spawnX = random.randint(
+                self.monsterSpawnArea[indexPos].x + 50,
+                (
+                    self.monsterSpawnArea[indexPos].x
+                    + self.monsterSpawnArea[indexPos].width
+                    - 50
+                ),
+            )
+            spawnY = random.randint(
+                self.monsterSpawnArea[indexPos].y + 50,
+                (
+                    self.monsterSpawnArea[indexPos].y
+                    + self.monsterSpawnArea[indexPos].height
+                    - 50
+                ),
+            )
+            if monsterChance <= 1:
                 self.monsterList.append(
                     monster.Spider(
                         self.playerMapPos,
@@ -298,27 +309,7 @@ class Room:
                         self.collisionBoxList,
                     )
                 )
-        if monsterChance <= 3:  # need to change this back at somepoint
-            if len(self.monsterSpawnArea) > 1:
-                indexPos = random.randint(0, len(self.monsterSpawnArea) - 1)
-            else:
-                indexPos = 0
-            numMonsters = random.randint(0, 3)
-            for _ in range(numMonsters):
-                spawnX = random.randint(
-                    self.monsterSpawnArea[indexPos].x,
-                    (
-                        self.monsterSpawnArea[indexPos].x
-                        + self.monsterSpawnArea[indexPos].width
-                    ),
-                )
-                spawnY = random.randint(
-                    self.monsterSpawnArea[indexPos].y,
-                    (
-                        self.monsterSpawnArea[indexPos].y
-                        + self.monsterSpawnArea[indexPos].height
-                    ),
-                )
+            elif monsterChance <= 3:
                 self.monsterList.append(
                     monster.Skeleton(
                         self.playerMapPos,
@@ -327,87 +318,27 @@ class Room:
                         self.collisionBoxList,
                     )
                 )
-        if monsterChance <= 5:  # need to change this back at somepoint
-            if len(self.monsterSpawnArea) > 1:
-                indexPos = random.randint(0, len(self.monsterSpawnArea) - 1)
-            else:
-                indexPos = 0
-            numMonsters = 1  # random.randint(0, 5)
-            for _ in range(numMonsters):
-                spawnX = random.randint(
-                    self.monsterSpawnArea[indexPos].x,
-                    (
-                        self.monsterSpawnArea[indexPos].x
-                        + self.monsterSpawnArea[indexPos].width
-                    ),
-                )
-                spawnY = random.randint(
-                    self.monsterSpawnArea[indexPos].y,
-                    (
-                        self.monsterSpawnArea[indexPos].y
-                        + self.monsterSpawnArea[indexPos].height
-                    ),
-                )
+            elif monsterChance <= 5:
                 self.monsterList.append(
-                    monster.Spider(
+                    monster.Zombie(
                         self.playerMapPos,
                         self.screenSize,
                         (spawnX, spawnY),
                         self.collisionBoxList,
                     )
                 )
-        if monsterChance <= 7:  # need to change this back at somepoint
-            if len(self.monsterSpawnArea) > 1:
-                indexPos = random.randint(0, len(self.monsterSpawnArea) - 1)
-            else:
-                indexPos = 0
-            numMonsters = 1  # random.randint(0, 5)
-            for _ in range(numMonsters):
-                spawnX = random.randint(
-                    self.monsterSpawnArea[indexPos].x,
-                    (
-                        self.monsterSpawnArea[indexPos].x
-                        + self.monsterSpawnArea[indexPos].width
-                    ),
-                )
-                spawnY = random.randint(
-                    self.monsterSpawnArea[indexPos].y,
-                    (
-                        self.monsterSpawnArea[indexPos].y
-                        + self.monsterSpawnArea[indexPos].height
-                    ),
-                )
+            elif monsterChance <= 7:
                 self.monsterList.append(
-                    monster.Spider(
+                    monster.Slim(
                         self.playerMapPos,
                         self.screenSize,
                         (spawnX, spawnY),
                         self.collisionBoxList,
                     )
                 )
-        if monsterChance <= 9:  # need to change this back at somepoint
-            if len(self.monsterSpawnArea) > 1:
-                indexPos = random.randint(0, len(self.monsterSpawnArea) - 1)
-            else:
-                indexPos = 0
-            numMonsters = 1  # random.randint(0, 5)
-            for _ in range(numMonsters):
-                spawnX = random.randint(
-                    self.monsterSpawnArea[indexPos].x,
-                    (
-                        self.monsterSpawnArea[indexPos].x
-                        + self.monsterSpawnArea[indexPos].width
-                    ),
-                )
-                spawnY = random.randint(
-                    self.monsterSpawnArea[indexPos].y,
-                    (
-                        self.monsterSpawnArea[indexPos].y
-                        + self.monsterSpawnArea[indexPos].height
-                    ),
-                )
+            elif monsterChance <= 9:
                 self.monsterList.append(
-                    monster.Spider(
+                    monster.Bat(
                         self.playerMapPos,
                         self.screenSize,
                         (spawnX, spawnY),
@@ -518,17 +449,13 @@ class Room:
         self.collisionBoxList.append(self.BLB)
 
     def draw(self):
-        self.screen.fill((0, 0, 0))
-        """for i in range(len(self.collisionBoxList)):
+        self.screen.fill("grey30")
+        for i in range(len(self.collisionBoxList)):
             pygame.draw.rect(
                 self.screen,
-                (
-                    50 + (25*i),
-                    50 + (25*i),
-                    50 + (25*i),
-                ),
+                ("grey10"),
                 self.collisionBoxList[i],
-            )"""
+            )
         pygame.draw.rect(
             self.screen,
             (255, 255, 255),

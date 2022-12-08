@@ -46,40 +46,46 @@ class Monster:
         self.XChance = 0
         self.YChance = 0
         self.moveDuration = 0
+        self.returnVal = 0
 
     def draw(self):
-        pygame.draw.rect(self.screen, (0, 255, 0), self.rect)
+        pygame.draw.rect(self.screen, self.color, self.rect)
         #pygame.draw.rect(self.screen, (0, 0, 255), self.hitbox, 10)
 
     def collision(self, direction):
-        returnVal = 0
+        
         for box in self.collisionBoxList:
             if box.colliderect(self.hitbox):
                 if direction == "horizontal":
                     if self.direction.x > 0:
                         self.hitbox.right = box.left
-                        returnVal = 1
+                        self.returnVal = 1
                     if self.direction.x < 0:
                         self.hitbox.left = box.right
-                        returnVal = 2
+                        self.returnVal = 2
                     self.rect.centerx = self.hitbox.centerx
                     self.pos.x = self.hitbox.centerx
 
                 if direction == "vertical":
                     if self.direction.y > 0:
                         self.hitbox.bottom = box.top
-                        returnVal = 3
+                        self.returnVal = 3
                     if self.direction.y < 0:
                         self.hitbox.top = box.bottom
-                        returnVal = 4
+                        self.returnVal = 4
                     self.rect.centery = self.hitbox.centery
                     self.pos.y = self.hitbox.centery
-        return returnVal
+        
+
+            print(self.returnVal)
+        self.returnVal = 0
+        return self.returnVal
 
     def move(self, time):
         moveChance = 0
+        collisionCheckVal = self.collision("horizontal")
         if self.active == False:
-            moveChance = random.randint(0, 250)
+            moveChance = 0 #random.randint(0, 250)
         if moveChance == 0:
             self.active = True
 
@@ -88,25 +94,29 @@ class Monster:
                 self.YChance = random.randint(0, 3)
                 self.moveDuration = random.randint(20, 80)
             if self.moveDurationCheck < self.moveDuration:
-                collisionCheckVal = self.collision("horizontal")
-                if collisionCheckVal == 1 and self.XChance == 1:
+                
+                if collisionCheckVal == 1:
                     self.XChance = 2
-                if collisionCheckVal == 2 and self.XChance == 2:
+                if collisionCheckVal == 2:
                     self.XChance = 1
-                if collisionCheckVal == 3 and self.YChance == 1:
+                if collisionCheckVal == 3:
                     self.YChance = 2
-                if collisionCheckVal == 4 and self.YChance == 2:
+                if collisionCheckVal == 4:
                     self.YChance = 1
 
-                if self.XChance == 1:
-                    self.direction.x = 1
-                elif self.XChance == 2:
-                    self.direction.x = -1
+                if (self.hitbox.right <= self.screenSize[0] and self.hitbox.left >= 0):
+                    if self.XChance == 1 and self.hitbox.right <= self.screenSize[0]:
+                        self.direction.x = 1
+                    elif self.XChance == 2 and self.hitbox.left >= 0:
+                        self.direction.x = -1
+                else: self.direction.x *= -1
 
-                if self.YChance == 1:
-                    self.direction.y = 1
-                elif self.YChance == 2:
-                    self.direction.y = -1
+                if (self.hitbox.bottom <= self.screenSize[1] and self.hitbox.top >= 0):
+                    if self.YChance == 1 and self.hitbox.bottom <= self.screenSize[1]:
+                        self.direction.y = 1
+                    elif self.YChance == 2 and self.hitbox.top >= 0:
+                        self.direction.y = -1
+                else: self.direction.y *= -1
                 self.moveDurationCheck += 1
             else:
                 self.active = False
@@ -159,6 +169,7 @@ class Spider(Monster):
         self.size = (40, 40)
         self.rect.w, self.rect.h = self.size
         self.hitbox.w, self.hitbox.h = self.size
+        self.color = "green"
 
 
 class Skeleton(Monster):
@@ -177,6 +188,7 @@ class Skeleton(Monster):
         self.rect.w, self.rect.h = self.size
         self.hitbox.w, self.hitbox.h = self.size
         hasArmor = random.randint(0, 100)
+        self.color = "lightblue"
         if hasArmor <= 7:
             whichArmor = random.randint(0, 5)
             if whichArmor >= 4:
@@ -217,6 +229,7 @@ class Zombie(Monster):
         self.rect.w, self.rect.h = self.size
         self.hitbox.w, self.hitbox.h = self.size
         hasArmor = random.randint(0, 100)
+        self.color = "blue"
         if hasArmor <= 7:
             whichArmor = random.randint(0, 5)
             if whichArmor >= 4:
@@ -256,6 +269,7 @@ class Slim(Monster):
         self.size = (50, 50)
         self.rect.w, self.rect.h = self.size
         self.hitbox.w, self.hitbox.h = self.size
+        self.color = "limegreen"
 
 
 class Bat(Monster):
@@ -273,3 +287,4 @@ class Bat(Monster):
         self.size = (20, 20)
         self.rect.w, self.rect.h = self.size
         self.hitbox.w, self.hitbox.h = self.size
+        self.color = "bisque"
