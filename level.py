@@ -63,7 +63,7 @@ class Level:
                         self.screenSize,
                         self.screen,
                         (self.player.rect.width, self.player.rect.height),
-                        self.playerMapPos, 
+                        self.playerMapPos,
                     )
                 )
 

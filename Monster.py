@@ -50,7 +50,6 @@ class Monster:
 
     def draw(self):
         pygame.draw.rect(self.screen, self.color, self.rect)
-        #pygame.draw.rect(self.screen, (0, 0, 255), self.hitbox, 10)
 
     def collision(self, direction):
         
@@ -77,7 +76,7 @@ class Monster:
                     self.pos.y = self.hitbox.centery
         
 
-            print(self.returnVal)
+            #print(self.returnVal)
         self.returnVal = 0
         return self.returnVal
 
@@ -85,7 +84,7 @@ class Monster:
         moveChance = 0
         collisionCheckVal = self.collision("horizontal")
         if self.active == False:
-            moveChance = 0 #random.randint(0, 250)
+            moveChance =  random.randint(0, 250)
         if moveChance == 0:
             self.active = True
 

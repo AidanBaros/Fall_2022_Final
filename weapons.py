@@ -3,8 +3,9 @@ class Weapon:
         self.damage = 0
         self.critChance = 10
         self.attackSpeed = 0
-        self.range = 0
-        self.damageType = None #This is for later but i think it would be cool to add this in (bludgeoing, slashing, piercing)
+        self.length = 0
+        self.width = 0
+        self.damageType = None
         self.EnchantmentList = []
         self.Sockets = []
 
@@ -14,7 +15,9 @@ class Dagger(Weapon):
         super().__init__()
         self.damage = 7
         self.attackSpeed = 0.5
-        self.range = 40
+        self.length = 40
+        self.width = 10
+        self.damageType = "Piercing"
 
 
 class Club(Weapon):
@@ -22,7 +25,9 @@ class Club(Weapon):
         super().__init__()
         self.damage = 6
         self.attackSpeed = 1
-        self.range = 55
+        self.length = 55
+        self.width = 20
+        self.damageType = "Bludgeoning"
 
 
 class Axe(Weapon):
@@ -30,7 +35,9 @@ class Axe(Weapon):
         super().__init__()
         self.damage = 12
         self.attackSpeed = 1
-        self.range = 55
+        self.length = 55
+        self.width = 5
+        self.damageType = "Slashing"
 
 
 class Spear(Weapon):
@@ -38,7 +45,9 @@ class Spear(Weapon):
         super().__init__()
         self.damage = 10
         self.attackSpeed = 1.25
-        self.range = 100
+        self.length = 100
+        self.width = 10
+        self.damageType = "Piercing"
 
 
 class Mace(Weapon):
@@ -46,7 +55,9 @@ class Mace(Weapon):
         super().__init__()
         self.damage = 12
         self.attackSpeed = 1
-        self.range = 55 
+        self.length = 55
+        self.width = 20 
+        self.damageType = "Bludgeoning"
 
 
 class BattleAxe(Weapon):
@@ -54,7 +65,9 @@ class BattleAxe(Weapon):
         super().__init__()
         self.damage = 16
         self.attackSpeed = 1.75
-        self.range = 70
+        self.length = 70
+        self.width = 10
+        self.damageType = "Slashing"
 
 
 class Maul(Weapon):
@@ -62,7 +75,9 @@ class Maul(Weapon):
         super().__init__()
         self.damage = 14
         self.attackSpeed = 1.5
-        self.range = 65
+        self.length = 65
+        self.width = 20
+        self.damageType = "Bludgeoning"
 
 
 class GreatSword(Weapon):
@@ -70,7 +85,9 @@ class GreatSword(Weapon):
         super().__init__()
         self.damage = 20
         self.attackSpeed = 2
-        self.range = 70
+        self.length = 70
+        self.width = 25
+        self.damageType = "Slashing"
 
 
 class LongSword(Weapon):
@@ -78,7 +95,9 @@ class LongSword(Weapon):
         super().__init__()
         self.damage = 14
         self.attackSpeed = 1.5
-        self.range = 80
+        self.length = 80
+        self.width = 15
+        self.damageType = "Slashing"
 
 
 class ShortSword(Weapon):
@@ -86,7 +105,9 @@ class ShortSword(Weapon):
         super().__init__()
         self.damage = 12
         self.attackSpeed = 0.75
-        self.range = 60
+        self.length = 60
+        self.width = 10
+        self.damageType = "Slashing"
 
 
 class WarHammer(Weapon):
@@ -94,4 +115,6 @@ class WarHammer(Weapon):
         super().__init__()
         self.damage = 14
         self.attackSpeed = 1.25
-        self.range = 60
+        self.length = 60
+        self.width = 20
+        self.damageType = "Bludgeoning"

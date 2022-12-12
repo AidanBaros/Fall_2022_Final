@@ -1,5 +1,7 @@
 import pygame
+import time
 from rooms import Room
+import weapons
 
 
 class Player:
@@ -30,6 +32,8 @@ class Player:
         self.screenTransition = False
 
         self.health = 50
+
+        self.activeWeapon = weapons.Dagger()
 
     def getCollisionBoxList(self, collisionBoxList):
         self.collisionBoxList = collisionBoxList
@@ -132,6 +136,10 @@ class Player:
 
     def draw(self):
         pygame.draw.rect(self.screen, (255, 0, 0), self.rect)
+
+    def attack(self):
+        
+        pass
 
     def update(self, time: float, roomList: list[Room]):
         self.input()
