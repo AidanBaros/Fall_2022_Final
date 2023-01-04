@@ -270,15 +270,15 @@ class Room:
         monsterChance = random.randint(0, 15)
         numMonsters = 0
         if monsterChance <= 1:
-            numMonsters = 1  # random.randint(1, 6)
+            numMonsters = random.randint(1, 6)
         elif monsterChance <= 3:
-            numMonsters = 1  # random.randint(1, 4)
+            numMonsters = random.randint(1, 4)
         elif monsterChance <= 5:
-            numMonsters = 1  # random.randint(1, 4)
+            numMonsters = random.randint(1, 4)
         elif monsterChance <= 7:
-            numMonsters = 1  # random.randint(1, 5)
+            numMonsters = random.randint(1, 5)
         elif monsterChance <= 9:
-            numMonsters = 1  # random.randint(5, 11)
+            numMonsters = random.randint(5, 11)
         for _ in range(numMonsters):
             if len(self.monsterSpawnArea) > 1:
                 indexPos = random.randint(0, len(self.monsterSpawnArea) - 1)
