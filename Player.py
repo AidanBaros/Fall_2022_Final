@@ -1,6 +1,6 @@
 import pygame
 import time
-from rooms import Room
+from Rooms import Room
 import weapons
 
 

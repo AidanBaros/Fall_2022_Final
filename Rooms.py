@@ -1,7 +1,7 @@
 import pygame
 import random
-from map import Tile
-import monster
+from Map import Tile
+import Monster
 
 pygame.init()
 
@@ -42,7 +42,7 @@ class Room:
         self.a = False
         self.d = False
 
-        self.monsterList: list[monster.Monster] = []
+        self.monsterList: list[Monster.Monster] = []
 
         # SET OFFSET
         if self.ID == 1:
@@ -302,7 +302,7 @@ class Room:
             )
             if monsterChance <= 1:
                 self.monsterList.append(
-                    monster.Spider(
+                    Monster.Spider(
                         self.playerMapPos,
                         self.screenSize,
                         (spawnX, spawnY),
@@ -311,7 +311,7 @@ class Room:
                 )
             elif monsterChance <= 3:
                 self.monsterList.append(
-                    monster.Skeleton(
+                    Monster.Skeleton(
                         self.playerMapPos,
                         self.screenSize,
                         (spawnX, spawnY),
@@ -320,7 +320,7 @@ class Room:
                 )
             elif monsterChance <= 5:
                 self.monsterList.append(
-                    monster.Zombie(
+                    Monster.Zombie(
                         self.playerMapPos,
                         self.screenSize,
                         (spawnX, spawnY),
@@ -329,7 +329,7 @@ class Room:
                 )
             elif monsterChance <= 7:
                 self.monsterList.append(
-                    monster.Slim(
+                    Monster.Slim(
                         self.playerMapPos,
                         self.screenSize,
                         (spawnX, spawnY),
@@ -338,7 +338,7 @@ class Room:
                 )
             elif monsterChance <= 9:
                 self.monsterList.append(
-                    monster.Bat(
+                    Monster.Bat(
                         self.playerMapPos,
                         self.screenSize,
                         (spawnX, spawnY),

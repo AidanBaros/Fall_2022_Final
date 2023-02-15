@@ -1,11 +1,11 @@
 import pygame
 import numpy
 import time
-from map import *
-from home import *
-from rooms import Room
-from player import Player
-from monster import *
+from Map import *
+from Home import *
+from Rooms import Room
+from Player import Player
+from Monster import *
 from startup import *
 
 
